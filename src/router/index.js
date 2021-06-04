@@ -86,7 +86,19 @@ export const constantRoutes = [
   ruleManagementRouter,
   sqlAuditRouter,
   instanceManagementRouter,
-  systemManagementRouter
+  systemManagementRouter,
+  {
+    path: '/guide',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/guide/index'),
+        name: ',页面导航',
+        meta: { title: '页面导航', icon: 'guide', affix: true }
+      }
+    ]
+  },
 ]
 
 /**

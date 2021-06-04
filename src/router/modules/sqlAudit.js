@@ -1,14 +1,14 @@
 import Layout from '@/layout'
 
 const sqlAuditRouter = {
-  path: '/guide',
+  path: '/components-demo',
   component: Layout,
   children: [
     {
-      path: 'index',
-      component: () => import('@/views/guide/index'),
+      path: 'split-pane',
+      component: () => import('@/views/components-demo/split-pane'),
       name: 'SQLAudit',
-      meta: { title: 'SQL审核', icon: 'guide', affix: true }
+      meta: { title: 'SQL审核', icon: 'nested', affix: true }
     }
   ]
 }
