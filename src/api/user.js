@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/vue-element-admin/user/login',
+    url: '/vue-element-admin/user/login', // 后端接口url
     method: 'post',
     data
   })

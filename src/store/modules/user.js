@@ -30,10 +30,11 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+  login({ commit }, userInfo) { // 定义login方法，在组件中使用 this.$store.dispatch() 调用
     const { username, password } = userInfo
+
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ username: username.trim(), password: password }).then(response => { // 使用login接口进行网络请求
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)

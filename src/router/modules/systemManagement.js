@@ -3,22 +3,23 @@ import Layout from '@/layout'
 const systemManagementRouter = {
   path: '/table',
   component: Layout,
-  redirect: '/table/complex-table',
+  // redirect: '/table/complex-table',
+  redirect: 'noRedirect',
   name: 'SystemManagement',
   meta: {
     title: '系统管理',
-    icon: 'table'
+    icon: 'component'
   },
   children: [
     {
-      path: 'dynamic-table',
-      component: () => import('@/views/table/dynamic-table/index'),
+      path: 'complex-table',
+      component: () => import('@/views/table/complex-table'),
       name: 'UserManagement',
       meta: { title: '用户管理' }
     },
     {
-      path: 'drag-table',
-      component: () => import('@/views/table/drag-table'),
+      path: 'user-edit-table',
+      component: () => import('@/views/table/user-edit-table/index'),
       name: 'RoleManagement',
       meta: { title: '角色管理' }
     }

@@ -152,7 +152,7 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
+    handleLogin() { // 对登录进行处理
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true

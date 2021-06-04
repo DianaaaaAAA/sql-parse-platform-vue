@@ -52,7 +52,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['待执行', '已暂停', '已执行', '已回滚', '执行失败']
         },
         series: [
           {
@@ -62,11 +62,11 @@ export default {
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: 320, name: '待执行' },
+              { value: 240, name: '已暂停' },
+              { value: 149, name: '已执行' },
+              { value: 100, name: '已回滚' },
+              { value: 59, name: '执行失败' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

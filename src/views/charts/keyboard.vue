@@ -1,23 +1,40 @@
+<!-- <el-upload
+  class="upload-demo"
+  drag
+  action="https://jsonplaceholder.typicode.com/posts/"
+  multiple>
+  <i class="el-icon-upload"></i>
+  <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+  <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
+</div>
+ -->
 <template>
-  <div class="chart-container">
-    <chart height="100%" width="100%" />
+  <div class="components-container">
+    <aside>
+      请将待审核的SQL命令文本上传
+    </aside>
+    <div class="editor-container">
+      <dropzone id="myVueDropzone" url="https://httpbin.org/post" @dropzone-removedFile="dropzoneR" @dropzone-success="dropzoneS" />
+    </div>
   </div>
 </template>
 
 <script>
-import Chart from '@/components/Charts/Keyboard'
+import Dropzone from '@/components/Dropzone'
 
 export default {
-  name: 'KeyboardChart',
-  components: { Chart }
+  name: 'DropzoneDemo',
+  components: { Dropzone },
+  methods: {
+    dropzoneS(file) {
+      console.log(file)
+      this.$message({ message: 'Upload success', type: 'success' })
+    },
+    dropzoneR(file) {
+      console.log(file)
+      this.$message({ message: 'Delete success', type: 'success' })
+    }
+  }
 }
 </script>
-
-<style scoped>
-.chart-container{
-  position: relative;
-  width: 100%;
-  height: calc(100vh - 84px);
-}
-</style>
-
