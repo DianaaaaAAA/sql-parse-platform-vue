@@ -12,8 +12,8 @@ const systemManagementRouter = {
   },
   children: [
     {
-      path: 'complex-table',
-      component: () => import('@/views/table/complex-table'),
+      path: 'user-manage-table',
+      component: () => import('@/views/table/user-manage-table'),
       name: 'UserManagement',
       meta: { title: '用户管理' }
     },
