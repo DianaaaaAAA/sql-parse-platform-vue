@@ -9,28 +9,28 @@ import getPageTitle from '@/utils/get-page-title'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
-//路由拦截器
+// 路由拦截器
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
 
   // set page title
-  //设置目标页面的title，从目标路由的meta中获取
+  // 设置目标页面的title，从目标路由的meta中获取
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
-  //获取store中的登录令牌，有令牌表示有登录
+  // 获取store中的登录令牌，有令牌表示有登录
   const hasToken = getToken()
 
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      //如果有登陆且目路径是/login，路由到首页
+      // 如果有登陆且目路径是/login，路由到首页
       next({ path: '/' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      //获取登录用户的角色，能获取到表示有角色信息，否则就用getInfo，获取当前登录用户的角色信息
+      // 获取登录用户的角色，能获取到表示有角色信息，否则就用getInfo，获取当前登录用户的角色信息
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
         next()
@@ -38,15 +38,15 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          //派发user/getInfo action，获取当前用户的角色信息
+          // 派发user/getInfo action，获取当前用户的角色信息
           const { roles } = await store.dispatch('user/getInfo')
 
           // generate accessible routes map based on roles
-          //根据用户的角色信息，派发到permission/generateRoutes action，生成动态路由表
+          // 根据用户的角色信息，派发到permission/generateRoutes action，生成动态路由表
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
           // dynamically add accessible routes
-          //挂载动态路由
+          // 挂载动态路由
           router.addRoutes(accessRoutes)
 
           // hack method to ensure that addRoutes is complete

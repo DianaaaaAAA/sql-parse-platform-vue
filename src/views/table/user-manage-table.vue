@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="用户名" style="margin-right: 20px; width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-     <!-- <el-select v-model="listQuery.importance" placeholder="权限等级" clearable style="width: 250px" class="filter-item">
+      <!-- <el-select v-model="listQuery.importance" placeholder="权限等级" clearable style="width: 250px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
       </el-select> -->
       <el-select v-model="listQuery.sort" style="margin-left: 20px; width: 200px" class="filter-item" @change="handleFilter">
@@ -11,13 +11,13 @@
       <el-button v-waves class="filter-item" style="margin-left: 20px; width: 150px" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
       </el-button>
-      <el-button class="filter-item" style="margin-left: 20px; width: 150px" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 20px; width: 150px" type="warning" icon="el-icon-edit" @click="handleCreate">
         增加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" style="margin-left: 640px; width: 150px" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button v-waves :loading="downloadLoading" class="filter-item" style="margin-left: 640px; width: 150px" type="success" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
-<!--      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+      <!--      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         reviewer
       </el-checkbox> -->
     </div>
@@ -61,7 +61,7 @@
           <span>{{ row.pageviews }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column label="Readings" align="center" width="95">
+      <!--      <el-table-column label="Readings" align="center" width="95">
         <template slot-scope="{row}">
           <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
           <span v-else>0</span>
@@ -69,10 +69,10 @@
       </el-table-column> -->
       <el-table-column label="状态" class-name="status-col" width="225">
         <template slot-scope="{row}">
-         <el-tag :type="row.status | statusFilter">
+          <el-tag :type="row.status | statusFilter">
             {{ row.status }}
           </el-tag>
-<!--          <span>{{ row.status }}</span> -->
+          <!--          <span>{{ row.status }}</span> -->
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
@@ -80,7 +80,7 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-<!--          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
+          <!--          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
             保存
           </el-button>
           <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
@@ -97,16 +97,16 @@
 
     <!--弹出框待修改-新建用户 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-     <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-       <el-form-item label="用户名">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="用户名">
           <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入用户名" />
         </el-form-item>
-       <el-form-item label="角色" prop="type">
+        <el-form-item label="角色" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
-<!--       <el-form-item label="日期" prop="timestamp">
+        <!--       <el-form-item label="日期" prop="timestamp">
           <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
         </el-form-item> -->
         <el-form-item label="描述" prop="title">
@@ -131,7 +131,7 @@
       </div>
     </el-dialog>
 
-<!--   <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
+    <!--   <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
       <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
         <el-table-column prop="key" label="Channel" />
         <el-table-column prop="pv" label="Pv" />
@@ -149,15 +149,14 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-
 export default {
-  name: 'user-manage-table',
+  name: 'UserManageTable',
   components: { Pagination },
   directives: { waves },
   filters: {
     statusFilter(status) {
       const statusMap = {
-        //此处应改为正常or锁定
+        // 此处应改为正常or锁定
         published: 'success',
         deleted: 'danger'
       }

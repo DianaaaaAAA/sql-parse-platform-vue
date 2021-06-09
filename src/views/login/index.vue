@@ -155,19 +155,19 @@ export default {
       })
     },
     handleLogin() { // 对登录进行处理
-      //loginForm表单验证
+      // loginForm表单验证
       this.$refs.loginForm.validate(valid => {
-        //验证成功
+        // 验证成功
         if (valid) {
           this.loading = true
-          //派发到store的user/login action 
+          // 派发到store的user/login action
           this.$store.dispatch('user/login', this.loginForm)
-            .then(() => { //登录成功
-            //路由到首页，指定query参数
+            .then(() => { // 登录成功
+            // 路由到首页，指定query参数
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
-            .catch(() => { //异常
+            .catch(() => { // 异常
               this.loading = false
             })
         } else {

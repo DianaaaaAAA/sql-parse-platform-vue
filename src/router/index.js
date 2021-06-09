@@ -41,8 +41,8 @@ import systemManagementRouter from './modules/systemManagement'
 export const constantRoutes = [
   {
     path: '/redirect',
-    component: Layout, //定义component的时候都是对象
-    //但是，在数据库中保存的都是字符串；需要将组件名称替换为组件对象，同时，将路由对象中没有值得children删除
+    component: Layout, // 定义component的时候都是对象
+    // 但是，在数据库中保存的都是字符串；需要将组件名称替换为组件对象，同时，将路由对象中没有值得children删除
     hidden: true,
     children: [
       {
@@ -85,8 +85,20 @@ export const constantRoutes = [
     ]
   },
   ruleManagementRouter,
-  sqlAuditRouter,
   instanceManagementRouter,
+  {
+    path: '/charts',
+    component: Layout,
+    children: [
+      {
+        path: 'keyboard',
+        component: () => import('@/views/charts/keyboard'),
+        name: 'SQLtxt',
+        meta: { title: 'SQL命令', icon: 'el-icon-document-add', affix: true }
+      }
+    ]
+  },
+  sqlAuditRouter,
   systemManagementRouter,
   {
     path: '/guide',
@@ -95,11 +107,11 @@ export const constantRoutes = [
       {
         path: 'index',
         component: () => import('@/views/guide/index'),
-        name: ',页面导航',
+        name: '页面导航',
         meta: { title: '页面导航', icon: 'guide', affix: true }
       }
     ]
-  },
+  }
 ]
 
 /**

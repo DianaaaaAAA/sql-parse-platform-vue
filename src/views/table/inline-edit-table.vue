@@ -19,7 +19,7 @@
         </template>
       </el-table-column>
 
-     <el-table-column class-name="status-col" align="center" label="状态" width="110">
+      <el-table-column class-name="status-col" align="center" label="状态" width="110">
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
             {{ row.status }}
