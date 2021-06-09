@@ -99,6 +99,8 @@ export default {
       loginForm: {
         username: 'admin',
         password: '111111'
+        // username: 'demo1',
+        // password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -153,15 +155,19 @@ export default {
       })
     },
     handleLogin() { // 对登录进行处理
+      //loginForm表单验证
       this.$refs.loginForm.validate(valid => {
+        //验证成功
         if (valid) {
           this.loading = true
+          //派发到store的user/login action 
           this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
+            .then(() => { //登录成功
+            //路由到首页，指定query参数
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
-            .catch(() => {
+            .catch(() => { //异常
               this.loading = false
             })
         } else {

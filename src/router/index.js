@@ -16,32 +16,33 @@ import systemManagementRouter from './modules/systemManagement'
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * hidden: true                   设置菜单是否隐藏，不显示在左边菜单，缺省FALSE
+ * alwaysShow: true               设置在一级菜单上，是否总是显示，true表示总是显示
+ *                                如果设为FALSE，一级菜单只会在有多个子菜单的情况下才显示
+ *
+ * redirect: noRedirect           如果设置成noRedirect，面包屑不会重定向
+ * name:'router-name'             路由名称，必须设置且唯一！！
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    roles: ['admin','editor']    允许路由的角色列表
+    title: 'title'               显示在左边导航栏和面包屑上的名称
+    icon: 'svg-name'/'el-icon-x' 图标名称
+    noCache: true                页面是否不要缓存，缺省为false
+    affix: true                  标签页面是否总是显示（不能关闭）
+    breadcrumb: false            缺省TRUE，是否以面包屑显示页面
+    activeMenu: '/example/list'  在左边菜单栏上高亮显示
   }
  */
 
 /**
- * constantRoutes
+ * constantRoutes基本路由表
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
 export const constantRoutes = [
   {
     path: '/redirect',
-    component: Layout,
+    component: Layout, //定义component的时候都是对象
+    //但是，在数据库中保存的都是字符串；需要将组件名称替换为组件对象，同时，将路由对象中没有值得children删除
     hidden: true,
     children: [
       {

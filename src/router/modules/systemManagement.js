@@ -18,10 +18,16 @@ const systemManagementRouter = {
       meta: { title: '用户管理' }
     },
     {
-      path: 'user-edit-table',
-      component: () => import('@/views/table/user-edit-table/index'),
+      path: 'role-manage-table',
+      component: () => import('@/views/table/role-manage-table'),
       name: 'RoleManagement',
       meta: { title: '角色管理' }
+    },
+    {
+      path: 'action-table',
+      component: () => import('@/views/table/action-table'),
+      name: 'Action',
+      meta: { title: '操作记录' }
     }
   ]
 }
