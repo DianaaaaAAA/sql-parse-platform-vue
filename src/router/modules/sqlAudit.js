@@ -1,12 +1,12 @@
 import Layout from '@/layout'
 
 const sqlAuditRouter = {
-  path: '/components-demo',
+  path: '/tisp',
   component: Layout,
   children: [
     {
-      path: 'split-pane',
-      component: () => import('@/views/components-demo/split-pane'),
+      path: 'sql-audit-manage',
+      component: () => import('@/views/tisp/sql-audit-manage'),
       name: 'SQLAudit',
       meta: { title: 'SQL审核', icon: 'nested', affix: true }
     }

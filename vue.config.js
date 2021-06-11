@@ -12,8 +12,8 @@ const name = defaultSettings.title || 'vue Element Admin' // page title
 // use administrator privileges to execute the command line.
 // For example, Mac: sudo npm run
 // You can change the port by the following method:
-// port = 9527 npm run dev OR npm run dev --port = 9527
-const port = process.env.port || process.env.npm_config_port || 9527 // dev port
+// port = 9529 npm run dev OR npm run dev --port = 9529
+const port = process.env.port || process.env.npm_config_port || 9529 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -30,6 +30,17 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
+    proxy: {
+      [process.env.VUE_APP_BASE_API]: {
+        target: 'http://192.168.10.210:9528/', // 真是服务器的接口地址 // http://192.168.10.210:8081/json.data.json,
+        secure: false, // 如果是 https ,需要开启这个选项
+        changeOrigin: true, // 是否是跨域请求?肯定是啊,不跨域就没有必要配置这个proxy了.
+        pathRewirte: { // 这里是追加链接,也可以删除暗号
+          ['^' + process.env.VUE_APP_BASE_API]: '' // /dev-api/tisp == http://192.168.10.210:8081/tisp
+        },
+        logLevel: 'debug'
+      }
+    },
     port: port,
     open: true,
     overlay: {

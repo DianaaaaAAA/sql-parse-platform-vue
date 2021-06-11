@@ -8,6 +8,7 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import ruleManagementRouter from './modules/ruleManagement'
+import sqlTextManagementRouter from './modules/sqlTextManagement'
 import sqlAuditRouter from './modules/sqlAudit'
 import instanceManagementRouter from './modules/instanceManagement'
 import systemManagementRouter from './modules/systemManagement'
@@ -86,18 +87,7 @@ export const constantRoutes = [
   },
   ruleManagementRouter,
   instanceManagementRouter,
-  {
-    path: '/charts',
-    component: Layout,
-    children: [
-      {
-        path: 'keyboard',
-        component: () => import('@/views/charts/keyboard'),
-        name: 'SQLtxt',
-        meta: { title: 'SQL命令', icon: 'el-icon-document-add', affix: true }
-      }
-    ]
-  },
+  sqlTextManagementRouter,
   sqlAuditRouter,
   systemManagementRouter,
   {

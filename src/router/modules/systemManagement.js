@@ -21,13 +21,13 @@ const systemManagementRouter = {
       path: 'role-manage-table',
       component: () => import('@/views/table/role-manage-table'),
       name: 'RoleManagement',
-      meta: { title: '角色管理', icon: 'el-icon-s-custom'}
+      meta: { title: '角色管理', icon: 'el-icon-s-custom' }
     },
     {
       path: 'action-table',
       component: () => import('@/views/table/action-table'),
       name: 'Action',
-      meta: { title: '操作记录' ,icon: 'el-icon-document'}
+      meta: { title: '操作记录', icon: 'el-icon-document' }
     }
   ]
 }
