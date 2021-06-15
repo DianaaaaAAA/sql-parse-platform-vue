@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { fetchInstanceList } from '@/api/instance'
+import { fetchAuditList } from '@/api/audit'
 
 export default {
   name: 'InlineEditTable',
@@ -74,7 +74,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchInstanceList().then(response => {
+      fetchAuditList().then(response => {
         this.list = response.data
         console.log(this.list)
         this.listLoading = false
