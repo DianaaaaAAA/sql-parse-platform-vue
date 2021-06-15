@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
-export function fetchUsersList() {
+export function fetchActionList() {
   return request({
-    url: '/tisp/user',
+    url: '/tisp/record',
     method: 'get'
   })
 }
+
