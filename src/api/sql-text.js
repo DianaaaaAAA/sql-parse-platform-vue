@@ -1,15 +1,15 @@
 import request from '@/utils/request'
 
-export function fetchInstanceList() {
+export function fetchSQLTextList() {
   return request({
-    url: '/tisp/instance',
+    url: '/tisp/sql-text',
     method: 'get'
   })
 }
 
-export function addInstance() {
+export function addSQLText() {
   return request({
-    url: '/tisp/instance',
+    url: '/tisp/sql-text',
     method: 'post'
   })
 }

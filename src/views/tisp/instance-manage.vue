@@ -71,7 +71,7 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="cancelAdd()">
+        <el-button @click="cancelAdd">
           关闭
         </el-button>
         <el-button
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { fetchInstanceList } from '@/api/instance'
+import { fetchInstanceList, addInstance } from '@/api/instance'
 
 export default {
   name: 'InlineEditTable',
@@ -136,6 +136,18 @@ export default {
 
     displayAdd() {
       this.addFormVisible = true
+    },
+
+    cancelAdd() {
+      this.addStr = {}
+      this.addFormVisible = false
+    },
+
+    add() {
+      addInstance().then(response => {
+        this.$message.success('操作成功')
+        this.cancelAdd()
+      })
     },
 
     monitor(row) {
