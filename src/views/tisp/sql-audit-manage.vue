@@ -12,19 +12,25 @@
 
       <el-table-column align="center" label="实例">
         <template slot-scope="{row}">
-          <span>{{ row.Name }}</span>
+          <span>{{ row.Instance }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="SQL脚本">
         <template slot-scope="{row}">
-          <span>{{ row.Name }}</span>
+          <span>{{ row.SQLText }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作者">
         <template slot-scope="{row}">
-          <span>{{ row.Name }}</span>
+          <span>{{ row.User }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="创建时间">
+        <template slot-scope="{row}">
+          <span>{{ row.Created }}</span>
         </template>
       </el-table-column>
 
@@ -48,9 +54,9 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        RUN: 'success',
-        STOP: 'info',
-        FAIL: 'danger'
+        DONE: 'success',
+        RUNNING: 'info',
+        TERMINATED: 'danger'
       }
       return statusMap[status]
     }

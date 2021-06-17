@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="displayAddAudit()">增加</el-button>
+    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="displayAdd">增加</el-button>
     <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="refresh()">刷新</el-button>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
@@ -38,6 +38,50 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+      :title="dialogStatus"
+      :visible.sync="addFormVisible"
+      :before-close="cancelAdd"
+    >
+      <el-form
+        ref="addForm"
+        :model="addStr"
+        :rules="addRules"
+        label-position="left"
+        label-width="140px"
+      >
+        <el-form-item label="主机地址" prop="Host">
+          <el-input v-model="addStr.Host" />
+        </el-form-item>
+        <el-form-item label="主机端口" prop="Port">
+          <el-input v-model="addStr.Port" type="number" />
+        </el-form-item>
+
+        <el-form-item label="主机账户" prop="User">
+          <el-input v-model="addStr.User" />
+        </el-form-item>
+
+        <el-form-item label="主机密码" prop="Password">
+          <el-input v-model="addStr.Password" />
+        </el-form-item>
+
+      </el-form>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="cancelAdd()">
+          关闭
+        </el-button>
+        <el-button
+          type="primary"
+          @click="add()"
+        >
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -63,6 +107,13 @@ export default {
       listQuery: {
         page: 1,
         limit: 10
+      },
+
+      dialogStatus: '',
+
+      addFormVisible: false,
+      addStr: {
+
       }
     }
   },
@@ -82,6 +133,11 @@ export default {
         this.listLoading = false
       })
     },
+
+    displayAdd() {
+      this.addFormVisible = true
+    },
+
     monitor(row) {
 
     }
