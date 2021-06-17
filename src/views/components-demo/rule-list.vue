@@ -5,27 +5,18 @@
       placeholder="搜索规则"
       style="margin-bottom: 5px; width: 200px;"
     />
-    <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;">刷新</el-button>
+    <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="fresh">刷新</el-button>
     <el-button type="warning" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="addDialogVisible = true">添加</el-button>
     <el-dialog
       title="添加规则"
       :visible.sync="addDialogVisible"
-      :before-close="handleClose"
+      :before-close="cancelAdd"
     >
       <el-form ref="NFSForm" label-position="left" label-width="100px" style="width: 500px; margin-left:40px;">
         <el-form-item label="规则名称">
           <el-input />
         </el-form-item>
-        <el-form-item label="规则类型">
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
+
         <el-form-item label="规则内容" label-width="100px">
           <el-input type="textarea" :rows="2" />
         </el-form-item>
@@ -49,43 +40,59 @@
     </el-dialog>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="80">
+      <el-table-column align="center" label="Case">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.Case }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="更新日期">
-        <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="120px" align="center" label="类型">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="重要度">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="状态" width="110">
+      <el-table-column width="180px" align="center" label="Close">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
+          <el-tag :type="row.Close | closeFilter">
+            {{ row.Close }}
           </el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" label="规则描述">
-        <template slot-scope="{row}">
-          <router-link :to="'/components-demo/rule-edit/index/'+row.id" class="link-type">
-            <span>{{ row.title }}</span>
-          </router-link>
+      <el-table-column width="120px" align="center" label="Content">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Content }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="100px" label="Item">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Item }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column class-name="status-col" label="Name" width="110">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column class-name="status-col" label="Position" width="110">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Position }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column class-name="status-col" label="Proiority" width="110">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Proiority }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column class-name="status-col" label="Summary" width="110">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Summary }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column class-name="status-col" label="Threshold" width="110">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Threshold }}</span>
         </template>
       </el-table-column>
 
@@ -114,20 +121,19 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+import { fetchRuleList } from '@/api/rule'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
   name: 'RuleList',
   components: { Pagination },
   filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
+    closeFilter(close) {
+      const closeMap = {
+        true: 'success',
+        false: 'danger'
       }
-      return statusMap[status]
+      return closeMap[close]
     }
   },
   data() {
@@ -140,17 +146,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20
-      },
-      options: [{
-        value: '选项1',
-        label: '这是个规则'
-      }, {
-        value: '选项2',
-        label: '诶 这也是个规则'
-      }, {
-        value: '选项3',
-        label: '没想到吧 还是规则'
-      }]
+      }
     }
   },
   created() {
@@ -159,11 +155,17 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+      fetchRuleList().then(response => {
+        this.list = response.data
+        console.log('rule', this.list)
         this.listLoading = false
       })
+    },
+    fresh() {
+      this.getList()
+    },
+    cancelAdd(done) {
+      this.addDialogVisible = false
     }
   }
 }
