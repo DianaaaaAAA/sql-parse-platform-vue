@@ -85,6 +85,12 @@ export default {
         console.log(this.list)
         this.listLoading = false
       })
+    },
+    displayAddAudit() {
+      // console.log('pushing')
+      this.$router.push({
+        path: '/tisp/applyForAudit'
+      })
     }
     // cancelEdit(row) {
     //   row.title = row.originalTitle
