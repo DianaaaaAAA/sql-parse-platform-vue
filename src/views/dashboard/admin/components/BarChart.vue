@@ -62,7 +62,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['select', 'update', 'altert', 'insert', 'create', 'drop', 'truncate'],
+          data: ['Mon', 'update', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'],
           axisTick: {
             alignWithLabel: true
           }
