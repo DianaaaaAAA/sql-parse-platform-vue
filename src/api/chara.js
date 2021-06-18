@@ -6,4 +6,17 @@ export function fetchCharaList() {
     method: 'get'
   })
 }
-
+export function createChara(data) {
+  return request({
+    url: '/tisp/chara',
+    method: 'post',
+    msg
+  })
+}
+export function updateChara(data) {
+  return request({
+    url: '/tisp/chara',
+    method: 'put',
+    msg
+  })
+}

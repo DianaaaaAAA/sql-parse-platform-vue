@@ -1,29 +1,23 @@
 <template>
   <div class="app-container">
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="序号" width="90">
+      <el-table-column align="center" label="序号" width="50">
         <template slot-scope="{row}">
           <span>{{ row.ID }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="200px" align="center" label="用户">
+      <el-table-column width="120px" align="center" label="用户">
         <template slot-scope="{row}">
           <span>{{ row.User }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200px" align="center" label="角色">
+      <el-table-column width="120px" align="center" label="角色">
         <template slot-scope="{row}">
           <span>{{ row.Character }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column width="200px" align="center" label="角色等级">
-        <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column> -->
-
-     <el-table-column class-name="status-col" align="center" label="结果" width="220">
+      <el-table-column class-name="status-col" align="center" label="结果" width="120">
         <template slot-scope="{row}">
           <el-tag :type="row.Status | statusFilter">
             {{ row.Status }}
@@ -33,7 +27,7 @@
 
       <el-table-column min-width="100px" align="center" label="操作内容">
         <template slot-scope="{row}">
-       <!--   <template v-if="row.Content">
+          <!--   <template v-if="row.Content">
             <el-input v-model="row.title" class="edit-input" size="small" />
             <el-button
               class="cancel-btn"
@@ -50,7 +44,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="300px" align="center" label="操作日期">
+      <el-table-column width="280px" align="center" label="操作日期">
         <template slot-scope="{row}">
           <!-- <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span> -->
           <span>{{ row.Created }}</span>
@@ -58,7 +52,7 @@
       </el-table-column>
     </el-table>
 
-     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
   </div>
 </template>
@@ -70,7 +64,7 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 
 export default {
-  name: 'action-table',
+  name: 'ActionTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -89,7 +83,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 20
       }
     }
   },
@@ -103,7 +97,6 @@ export default {
         this.list = response.data
         console.log(this.list)
         this.listLoading = false
-
       })
       // const { data } = await fetchList(this.listQuery)
       // const items = data.items
@@ -113,7 +106,7 @@ export default {
       //   return v
       // })
       // this.listLoading = false
-    },
+    }
   }
 }
 </script>
