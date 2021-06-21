@@ -40,13 +40,19 @@
     </el-dialog>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="Case">
+      <el-table-column class-name="status-col" label="Name" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.Case }}</span>
+          <span>{{ scope.row.Name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="Close">
+      <el-table-column width="100px" label="Item" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Item }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="80px" align="center" label="Close">
         <template slot-scope="{row}">
           <el-tag :type="row.Close | closeFilter">
             {{ row.Close }}
@@ -54,21 +60,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="Content">
+      <el-table-column width="80px" align="center" label="Content">
         <template slot-scope="scope">
           <span>{{ scope.row.Content }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="Item">
-        <template slot-scope="scope">
-          <span>{{ scope.row.Item }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="Name" width="110">
-        <template slot-scope="scope">
-          <span>{{ scope.row.Name }}</span>
         </template>
       </el-table-column>
 
@@ -84,7 +78,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" label="Summary" width="110">
+      <el-table-column class-name="status-col" label="Summary" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.Summary }}</span>
         </template>
@@ -96,7 +90,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="230">
+      <el-table-column align="center" label="Case">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Case }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
           <router-link :to="'/components-demo/rule-edit/index/'+scope.row.id">
             <el-button
