@@ -9,19 +9,16 @@
                 <i v-if="paneRuleValid" class="el-icon-check" style="color: #008000;" />
                 <i v-else class="el-icon-warning" style="color: red;" />
               </span>
-              <el-form-item label="规则选择">
-                <!-- <el-tree
-                  ref="tree"
-                  :check-strictly="checkStrictly"
-                  :data="groupedRules"
-                  :props="defaultProps"
-                  show-checkbox
-                  node-key="path"
-                /> -->
-                <el-checkbox-group v-model="auditStr.rules" @change="handleRulesChange">
-                  <el-checkbox v-for="rule in ruleList" :key="rule.Item" :label="rule.Name">{{ rule.Name }}</el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
+
+              <el-tree
+                ref="tree"
+                :check-strictly="checkStrictly"
+                :data="groupedRules"
+                :props="defaultProps"
+                show-checkbox
+                node-key="label"
+                default-expand-all
+              />
             </el-tab-pane>
             <el-tab-pane name="second">
               <span slot="label">实例配置
@@ -136,8 +133,8 @@ export default {
       },
 
       defaultProps: {
-        children: 'data',
-        label: 'id'
+        children: 'children',
+        label: 'label'
       }
     }
   },
@@ -148,32 +145,33 @@ export default {
       const sqlTextValid = this.paneSQLTextValid
 
       return ruleValid && instanceValid && sqlTextValid
+    },
+    groupedRules: function() {
+      const map = {}
+      for (let i = 0; i < this.ruleList.length; i++) {
+        const temp = this.ruleList[i]
+        this.$set(temp, 'label', temp.Name + ' - (' + temp.Summary + ')')
+        const key = temp.Item.split('.')[0]
+        if (!map[key]) {
+          map[key] = [temp]
+        } else {
+          map[key].push(temp)
+        }
+      }
+
+      console.log('map', map)
+
+      const res = []
+      Object.keys(map).forEach(key => {
+        res.push({
+          label: key,
+          children: map[key]
+        })
+      })
+
+      console.log('res', res)
+      return res
     }
-    // groupedRules: function() {
-    //   const map = {}
-    //   for (let i = 0; i < this.ruleList.length; i++) {
-    //     const temp = this.ruleList[i]
-    //     const key = temp.Item.split('.')[0]
-    //     if (!map[key]) {
-    //       map[key] = [temp]
-    //     } else {
-    //       map[key].push(temp)
-    //     }
-    //   }
-
-    //   console.log('map', map)
-
-    //   const res = []
-    //   Object.keys(map).forEach(key => {
-    //     res.push({
-    //       id: key,
-    //       data: map[key]
-    //     })
-    //   })
-
-    //   console.log('res', res)
-    //   return res
-    // }
   },
   watch: {},
   created() {
