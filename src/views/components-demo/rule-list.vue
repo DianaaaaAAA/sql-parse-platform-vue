@@ -52,7 +52,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="80px" align="center" label="Close">
+      <el-table-column width="150px" align="center" label="Close">
+
         <template slot-scope="{row}">
           <el-tag :type="row.Close | closeFilter">
             {{ row.Close }}
@@ -84,7 +85,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" label="Threshold" width="110">
+      <el-table-column class-name="status-col" label="Threshold" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.Threshold }}</span>
         </template>
