@@ -52,7 +52,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['待执行', '已暂停', '已执行', '已回滚', '执行失败']
+          data: ['待执行', '已暂停', '已执行']
         },
         series: [
           {
@@ -65,8 +65,6 @@ export default {
               { value: 320, name: '待执行' },
               { value: 240, name: '已暂停' },
               { value: 149, name: '已执行' },
-              { value: 100, name: '已回滚' },
-              { value: 59, name: '执行失败' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600
