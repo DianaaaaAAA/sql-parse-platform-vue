@@ -4,25 +4,31 @@
     <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="refresh()">刷新</el-button>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="200">
+      <el-table-column align="center" label="ID" width="100">
         <template slot-scope="{row}">
-          <span>{{ row.ID }}</span>
+          <span>{{ row.id }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="名称">
         <template slot-scope="{row}">
-          <span>{{ row.Name }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" align="center" label="状态" width="200">
+      <el-table-column class-name="status-col" align="center" label="主机地址" width="400">
+        <template slot-scope="{row}">
+          <span>{{ row.addr }}</span>
+        </template>
+      </el-table-column>
+
+      <!-- <el-table-column class-name="status-col" align="center" label="状态" width="200">
         <template slot-scope="{row}">
           <el-tag :type="row.Status | statusFilter">
             {{ row.Status }}
           </el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column label="管理" width="113px" align="center">
         <template slot-scope="{row}">
@@ -114,6 +120,10 @@ export default {
       addFormVisible: false,
       addStr: {
 
+      },
+
+      addRules: {
+
       }
     }
   },
@@ -128,7 +138,7 @@ export default {
     getList() {
       this.listLoading = true
       fetchInstanceList().then(response => {
-        this.list = response.data
+        this.list = response.data.items
         console.log(this.list)
         this.listLoading = false
       })

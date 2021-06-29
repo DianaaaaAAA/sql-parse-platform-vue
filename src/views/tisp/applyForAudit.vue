@@ -75,7 +75,7 @@
                 <el-col :span="8">实例配置</el-col>
               </el-row>
               <el-row class="summary_item">
-                <el-col :span="8">脚本配置</el-col>
+                <el-col :span="8">脚本预览</el-col>
                 <el-col :span="16">{{ script }}</el-col>
               </el-row>
 
