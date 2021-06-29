@@ -2,13 +2,13 @@
   <el-table :data="list" style="width: 100%;padding-top: 15px;">
     <el-table-column label="实例告警" min-width="200">
       <template slot-scope="scope">
-        {{ scope.row.order_no | orderNoFilter }}
+        {{ scope.row.Name | orderNoFilter }}
       </template>
     </el-table-column>
     <el-table-column label="结果 " width="150" align="center">
       <template slot-scope="{row}">
-        <el-tag :type="row.status | statusFilter">
-          {{ row.status }}
+        <el-tag :type="row.Status | statusFilter">
+          {{ row.Status }}
         </el-tag>
       </template>
     </el-table-column>
@@ -16,14 +16,15 @@
 </template>
 
 <script>
-import { transactionList } from '@/api/remote-search'
+import { fetchInstanceList } from '@/api/instance'
 
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        success: 'success',
-        pending: 'danger'
+        RUN: 'success',
+        STOP: 'info',
+        FAIL: 'danger'
       }
       return statusMap[status]
     },
@@ -41,8 +42,8 @@ export default {
   },
   methods: {
     fetchData() {
-      transactionList().then(response => {
-        this.list = response.data.items.slice(0, 8)
+      fetchInstanceList().then(response => {
+        this.list = response.data
       })
     }
   }

@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             用户数
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="userTotal" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -22,7 +22,7 @@
           <div class="card-panel-text">
             审核规则
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="ruleTotal" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -35,7 +35,7 @@
           <div class="card-panel-text">
             工单总数
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="orderTotal" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -46,9 +46,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            待DBA审核工单总数
+            待审核工单数
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="pendingOrderTotal" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,15 +57,48 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import { fetchRuleList } from '@/api/rule'
+import { fetchAuditList } from '@/api/audit'
 
 export default {
   components: {
     CountTo
   },
+  data() {
+    return {
+      userTotal: 0,
+      ruleTotal: 0,
+      orderTotal: 0,
+      pendingOrderTotal: 0
+    }
+  },
+  created() {
+    this.CalUserTotal()
+    this.CalRuleTotal()
+    this.CalOrderTotal()
+  },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
+    },
+
+    CalUserTotal() { this.userTotal = 50 },
+    CalRuleTotal() {
+      fetchRuleList().then(response => {
+        this.ruleTotal = response.data.length
+      })
+    },
+    CalOrderTotal() {
+      fetchAuditList().then(response => {
+        this.orderTotal = response.data.length
+        for (const v of response.data) {
+          if (v.Status === 'PENDING') {
+            this.pendingOrderTotal++
+          }
+        }
+      })
     }
+
   }
 }
 </script>
