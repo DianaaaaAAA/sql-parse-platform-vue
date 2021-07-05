@@ -80,12 +80,12 @@
       </el-table-column>
 
       <el-table-column align="center" label="操作" width="180">
-        <template>
+        <template slot-scope="scope">
           <!-- <router-link :to="'/components-demo/rule-edit/index/'+scope.row.id"> -->
           <el-button
             type="success"
             size="small"
-            @click="updateDialogVisible = true"
+            @click="getByItem(scope.row.Item)"
           >
             编辑
           </el-button>
@@ -105,23 +105,19 @@
     >
       <el-form ref="NFSForm" label-position="left" label-width="100px" style="width: 500px; margin-left:40px;">
         <el-form-item label="规则名称">
-          <el-input />
+          <el-input :value="this.ruleName" />
         </el-form-item>
 
-        <el-form-item label="规则内容" label-width="100px">
-          <el-input type="textarea" :rows="2" />
-        </el-form-item>
-        <el-form-item label="规则重要度" label-width="100px">
-          <el-rate
-            :colors="impColors"
-          />
+        <el-form-item label="规则缩写">
+          <el-input :value="this.ruleItem" />
         </el-form-item>
 
-        <el-form-item label="是否启用">
-          <el-switch
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          />
+        <el-form-item label="规则摘要" label-width="100px">
+          <el-input type="textarea" :rows="2" :value="this.ruleSummary" />
+        </el-form-item>
+
+        <el-form-item label="可变阈值" label-width="100px">
+          <el-input-number :min="0" :max="10" :value="this.ruleThreshold" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -134,7 +130,7 @@
 </template>
 
 <script>
-import { fetchRuleList } from '@/api/rule'
+import { fetchRuleList, fetchRuleByItem } from '@/api/rule'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -167,7 +163,12 @@ export default {
       listQuery: {
         page: 1,
         limit: 20
-      }
+      },
+      ruleName: '',
+      ruleItem: '',
+      ruleSummary: '',
+      ruleThreshold: 0,
+      rule: null
     }
   },
   created() {
@@ -179,6 +180,17 @@ export default {
       fetchRuleList().then(response => {
         this.list = response.data.items
         this.listLoading = false
+      })
+    },
+    getByItem(item) {
+      this.updateDialogVisible = true
+      fetchRuleByItem(item).then(response => {
+        this.rule = response.data
+        console.log(response.data)
+        this.ruleName = response.data.Name
+        this.ruleItem = this.rule.Item
+        this.ruleSummary = this.rule.Summary
+        this.ruleThreshold = this.rule.Threshold
       })
     },
     add() {

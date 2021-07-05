@@ -6,3 +6,11 @@ export function fetchRuleList() {
     method: 'get'
   })
 }
+
+export function fetchRuleByItem(item) {
+  return request({
+    url: '/tispector/rule/getrulebyitem',
+    method: 'post',
+    params: { item }
+  })
+}
