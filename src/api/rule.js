@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchRuleList() {
   return request({
-    url: '/tisp/rule',
+    url: '/tispector/rule/list',
     method: 'get'
   })
 }

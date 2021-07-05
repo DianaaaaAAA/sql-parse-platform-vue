@@ -6,7 +6,7 @@
       style="margin-bottom: 5px; width: 200px;"
     />
     <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="fresh">刷新</el-button>
-    <el-button type="warning" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="addDialogVisible = true">添加</el-button>
+    <el-button type="warning" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="add">添加</el-button>
     <el-dialog
       title="添加规则"
       :visible.sync="addDialogVisible"
@@ -40,83 +40,95 @@
     </el-dialog>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column class-name="status-col" label="Name" width="180">
+      <el-table-column class-name="status-col" label="规则名称" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.Name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" label="Item" align="center">
+      <el-table-column width="120px" label="规则缩写" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.Item }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="Close">
-
-        <template slot-scope="{row}">
-          <el-tag :type="row.Close | closeFilter">
-            {{ row.Close }}
-          </el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="80px" align="center" label="Content">
-        <template slot-scope="scope">
-          <span>{{ scope.row.Content }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="Position" width="110">
-        <template slot-scope="scope">
-          <span>{{ scope.row.Position }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="Proiority" width="110">
-        <template slot-scope="scope">
-          <span>{{ scope.row.Proiority }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="Summary" width="150">
+      <el-table-column class-name="status-col" label="规则摘要" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.Summary }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" label="Threshold" width="100">
+      <el-table-column class-name="status-col" label="可变阈值" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.Threshold }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Case">
+      <el-table-column align="center" label="示例">
         <template slot-scope="scope">
           <span>{{ scope.row.Case }}</span>
         </template>
       </el-table-column>
 
+      <el-table-column width="150px" align="center" label="启用情况">
+
+        <template slot-scope="{row}">
+          <el-tag :type="row.Close | closeFilter">
+            {{ row.Close | closeStrFilter }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="操作" width="180">
-        <template slot-scope="scope">
-          <router-link :to="'/components-demo/rule-edit/index/'+scope.row.id">
-            <el-button
-              type="success"
-              size="small"
-            >
-              编辑
-            </el-button>
-            <el-button
-              type="danger"
-              size="small"
-            >
-              删除
-            </el-button>
-          </router-link>
+        <template>
+          <!-- <router-link :to="'/components-demo/rule-edit/index/'+scope.row.id"> -->
+          <el-button
+            type="success"
+            size="small"
+            @click="updateDialogVisible = true"
+          >
+            编辑
+          </el-button>
+          <el-button
+            type="danger"
+            size="small"
+          >
+            停用
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog
+      title="修改规则"
+      :visible.sync="updateDialogVisible"
+      :before-close="cancelUpdate"
+    >
+      <el-form ref="NFSForm" label-position="left" label-width="100px" style="width: 500px; margin-left:40px;">
+        <el-form-item label="规则名称">
+          <el-input />
+        </el-form-item>
 
+        <el-form-item label="规则内容" label-width="100px">
+          <el-input type="textarea" :rows="2" />
+        </el-form-item>
+        <el-form-item label="规则重要度" label-width="100px">
+          <el-rate
+            :colors="impColors"
+          />
+        </el-form-item>
+
+        <el-form-item label="是否启用">
+          <el-switch
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
@@ -131,8 +143,15 @@ export default {
   filters: {
     closeFilter(close) {
       const closeMap = {
-        true: 'success',
-        false: 'danger'
+        1: 'success',
+        0: 'danger'
+      }
+      return closeMap[close]
+    },
+    closeStrFilter(close) {
+      const closeMap = {
+        1: 'ON',
+        0: 'OFF'
       }
       return closeMap[close]
     }
@@ -140,6 +159,7 @@ export default {
   data() {
     return {
       impColors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      updateDialogVisible: false,
       addDialogVisible: false,
       list: null,
       total: 0,
@@ -157,9 +177,14 @@ export default {
     getList() {
       this.listLoading = true
       fetchRuleList().then(response => {
-        this.list = response.data
-        console.log('rule', this.list)
+        this.list = response.data.items
         this.listLoading = false
+      })
+    },
+    add() {
+      this.$message({
+        message: '该功能暂未启用',
+        type: 'warning'
       })
     },
     fresh() {
@@ -167,6 +192,9 @@ export default {
     },
     cancelAdd(done) {
       this.addDialogVisible = false
+    },
+    cancelUpdate(done) {
+      this.updateDialogVisible = false
     }
   }
 }
