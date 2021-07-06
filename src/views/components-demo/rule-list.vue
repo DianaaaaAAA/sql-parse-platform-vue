@@ -40,7 +40,7 @@
     </el-dialog>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column class-name="status-col" label="规则名称" width="180">
+      <el-table-column class-name="status-col" label="规则名称" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.Name }}</span>
         </template>
@@ -90,10 +90,11 @@
             编辑
           </el-button>
           <el-button
-            type="danger"
+            :type="scope.row.Close| handleCloseFilter"
             size="small"
+            @click="stop(scope.row.Item)"
           >
-            停用
+            {{ scope.row.Close | handleCloseStrFilter }}
           </el-button>
         </template>
       </el-table-column>
@@ -104,25 +105,29 @@
       :before-close="cancelUpdate"
     >
       <el-form ref="NFSForm" label-position="left" label-width="100px" style="width: 500px; margin-left:40px;">
-        <el-form-item label="规则名称">
-          <el-input :value="this.ruleName" />
+        <el-form-item label="规则缩写">
+          <el-input v-model="ruleItem" :disabled="true" />
         </el-form-item>
 
-        <el-form-item label="规则缩写">
-          <el-input :value="this.ruleItem" />
+        <el-form-item label="规则名称">
+          <el-input v-model="ruleName" />
         </el-form-item>
 
         <el-form-item label="规则摘要" label-width="100px">
-          <el-input type="textarea" :rows="2" :value="this.ruleSummary" />
+          <el-input v-model="ruleSummary" type="textarea" :rows="2" />
         </el-form-item>
 
         <el-form-item label="可变阈值" label-width="100px">
-          <el-input-number :min="0" :max="10" :value="this.ruleThreshold" />
+          <el-input v-model="ruleThreshold" />
+        </el-form-item>
+
+        <el-form-item label="示例" label-width="100px">
+          <el-input v-model="ruleCase" type="textarea" :rows="2" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="updateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="updateRule">确 定</el-button>
       </span>
     </el-dialog>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
@@ -130,7 +135,7 @@
 </template>
 
 <script>
-import { fetchRuleList, fetchRuleByItem } from '@/api/rule'
+import { fetchRuleList, fetchRuleByItem, updateRules } from '@/api/rule'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -150,6 +155,20 @@ export default {
         0: 'OFF'
       }
       return closeMap[close]
+    },
+    handleCloseFilter(close) {
+      const closeMap = {
+        1: 'danger',
+        0: 'success'
+      }
+      return closeMap[close]
+    },
+    handleCloseStrFilter(close) {
+      const closeMap = {
+        1: '停用',
+        0: '启用'
+      }
+      return closeMap[close]
     }
   },
   data() {
@@ -167,7 +186,8 @@ export default {
       ruleName: '',
       ruleItem: '',
       ruleSummary: '',
-      ruleThreshold: 0,
+      ruleThreshold: '',
+      ruleCase: '',
       rule: null
     }
   },
@@ -185,12 +205,60 @@ export default {
     getByItem(item) {
       this.updateDialogVisible = true
       fetchRuleByItem(item).then(response => {
-        this.rule = response.data
-        console.log(response.data)
-        this.ruleName = response.data.Name
+        this.rule = response.data[0]
+        this.ruleName = this.rule.Name
         this.ruleItem = this.rule.Item
         this.ruleSummary = this.rule.Summary
         this.ruleThreshold = this.rule.Threshold
+        this.ruleCase = this.rule.Case
+      })
+    },
+    updateRule() {
+      this.rule.Name = this.ruleName
+      this.rule.Item = this.ruleItem
+      this.rule.Summary = this.ruleSummary
+      this.rule.Threshold = this.ruleThreshold
+      this.rule.Case = this.ruleCase
+      var r = JSON.stringify(this.rule)
+      updateRules(r).then(response => {
+        this.getList()
+        this.updateDialogVisible = false
+        this.$notify({
+          title: 'Success',
+          message: '修改成功！',
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
+    stop(item) {
+      fetchRuleByItem(item).then(response => {
+        this.rule = response.data[0]
+        if (this.rule.Close === 1) {
+          this.rule.Close = 0
+          var r = JSON.stringify(this.rule)
+          updateRules(r).then(response => {
+            this.getList()
+            this.$notify({
+              title: 'Success',
+              message: '停用成功！',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        } else if (this.rule.Close === 0) {
+          this.rule.Close = 1
+          r = JSON.stringify(this.rule)
+          updateRules(r).then(response => {
+            this.getList()
+            this.$notify({
+              title: 'Success',
+              message: '启用成功！',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
       })
     },
     add() {

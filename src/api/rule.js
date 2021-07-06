@@ -10,7 +10,16 @@ export function fetchRuleList() {
 export function fetchRuleByItem(item) {
   return request({
     url: '/tispector/rule/getrulebyitem',
-    method: 'post',
+    method: 'get',
     params: { item }
+  })
+}
+
+export function updateRules(data) {
+  return request({
+    url: '/tispector/rule/update',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    data
   })
 }

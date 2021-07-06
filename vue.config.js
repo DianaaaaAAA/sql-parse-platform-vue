@@ -32,7 +32,7 @@ module.exports = {
   devServer: {
     proxy: {
       [process.env.VUE_APP_REAL_API]: {
-        target: 'http://192.168.10.210:8081/', // 真是服务器的接口地址 // http://192.168.10.210:8081/json.data.json,
+        target: 'http://192.168.10.210:8081/', // 真实服务器的接口地址 // http://192.168.10.210:8081/json.data.json,
         secure: false, // 如果是 https ,需要开启这个选项
         changeOrigin: true, // 是否是跨域请求?肯定是啊,不跨域就没有必要配置这个proxy了.
         pathRewrite: { // 这里是追加链接,也可以删除暗号
@@ -41,7 +41,7 @@ module.exports = {
         logLevel: 'debug'
       },
       [process.env.VUE_APP_FAKE_API]: {
-        target: 'http://192.168.10.210:9528/', // 真是服务器的接口地址 // http://192.168.10.210:8081/json.data.json,
+        target: 'http://192.168.10.210:9528/', // 真实服务器的接口地址 // http://192.168.10.210:8081/json.data.json,
         secure: false, // 如果是 https ,需要开启这个选项
         changeOrigin: true, // 是否是跨域请求?肯定是啊,不跨域就没有必要配置这个proxy了.
         pathRewrite: { // 这里是追加链接,也可以删除暗号
