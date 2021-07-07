@@ -5,13 +5,13 @@
       <el-select v-model="listQuery.Permission" placeholder="权限等级" clearable style="width: 250px" class="filter-item">
         <el-option v-for="item in PermissionOptions" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-button v-waves class="filter-item" style="margin-left: 20px; width: 100px" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
       </el-button>
-      <el-button class="filter-item" style="margin-left: 20px; width: 100px" type="warning" icon="el-icon-edit" @click="displayAdd">
+      <el-button class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="warning" icon="el-icon-circle-plus-outline" @click="displayAdd">
         增加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" style="margin-left: 20px; width: 100px" type="success" icon="el-icon-download" @click="handleDownload">
+      <el-button v-waves :loading="downloadLoading" class="filter-item" size="small" round style="margin: 0 0 16px 16px;" type="success" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
     </div>
@@ -45,13 +45,11 @@
       </el-table-column>
       <el-table-column label="最新登录时间" min-width="250px" align="center">
         <template slot-scope="{row}">
-          <!-- <span>{{ row.LastLogin | parseTime('{y}-{m}-{d} {h}:{i}') }}</span> -->
           <span>{{ row.LastLogin }}</span>
         </template>
       </el-table-column>
       <el-table-column label="登录次数" align="center" width="120px">
         <template slot-scope="{row}">
-          <!-- <svg-icon v-for="n in + row.importance" :key="n" class="meta-item__icon" /> -->
           <span>{{ row.LoginCount }}</span>
         </template>
       </el-table-column>
@@ -65,10 +63,10 @@
 
       <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="success" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.Status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button  size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -95,14 +93,17 @@
           <el-input v-model="addUser.Name" placeholder="请输入用户名" />
         </el-form-item>
         <el-form-item label="角色" prop="Character">
-          <!-- <el-input v-model="addUser.Character" /> -->
-          <el-select v-model="addUser.Character" class="filter-item" placeholder="请选择用户角色">
+          <el-select v-model="addUser.Character" class="filter-item">
             <el-option v-for="item in CharacterOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-
         <el-form-item label="权限等级" prop="Permission">
           <el-input v-model="addUser.Permission" type="number" :min="1" :max="3" style="margin-top:8px;"/>
+        </el-form-item>
+        <el-form-item label="用户状态" prop="Status">
+          <el-select v-model="addUser.Status" class="filter-item">
+            <el-option v-for="item in StatusOptions" :key="item" :label="item" :value="item" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div
@@ -136,8 +137,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        deleted: 'danger'
+        online: 'success',
+        offline: 'danger'
       }
       return statusMap[status]
     }
@@ -148,8 +149,9 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20
-        // sort: '+id'
+        limit: 20,
+        Name: undefined,
+        Permission: undefined
       },
       dialogStatus: '',
       addFormVisible: false,
@@ -157,11 +159,8 @@ export default {
       },
       CharacterOptions: ['User', 'Admin', 'DBA'],
       PermissionOptions: ['1', '2', '3'],
-      // textMap: {
-      //   update: 'Edit',
-      //   create: 'Create'
-      // },
-      addrules: {
+      StatusOptions: ['online', 'offline'],
+      addRules: {
         title: [{ required: true, message: '用户名必须输入', trigger: 'change' }],
       },
       downloadLoading: false
@@ -179,8 +178,16 @@ export default {
         this.listLoading = false
       })
     },
+    handleFilter(row) {
+      this.listQuery.page = 1
+      this.getList() 
+    },
     displayAdd() {
       this.addFormVisible = true
+      this.$message({
+        message: '该功能暂未启用',
+        type: 'warning'
+      })
     },
     cancelAdd() {
       this.addUser = {}
@@ -195,14 +202,11 @@ export default {
     monitor(row) {
 
     },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
-    },
+
     handleUpdate(row) {
-      this.addUser = Object.assign({}, row) // copy obj
-      this.dialogStatus = 'update'
       this.addFormVisible = true
+      this.addUser = Object.assign({}, row) // copy obj
+      this.dialogStatus = '修改信息'
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })

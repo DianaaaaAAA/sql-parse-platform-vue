@@ -4,13 +4,13 @@
       <el-select v-model="listQuery.Permission" placeholder="权限等级" clearable style="width: 250px" class="filter-item">
         <el-option v-for="item in PermissionOptions" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-button v-waves class="filter-item" style="margin-left: 20px; width: 100px" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
       </el-button>
-     <el-button class="filter-item" style="margin-left: 20px; width: 100px" type="warning" icon="el-icon-edit" @click="displayAdd">
+      <el-button class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="warning" icon="el-icon-circle-plus-outline" @click="displayAdd">
         增加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" style="margin-left: 20px; width: 100px" type="success" icon="el-icon-download" @click="handleDownload">
+      <el-button v-waves :loading="downloadLoading" class="filter-item" size="small" round style="margin: 0 0 16px 16px;" type="success" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
     </div>
@@ -33,11 +33,6 @@
           <span>{{ row.Name }}</span>
         </template>
       </el-table-column>
-      <!--      <el-table-column label="角色描述" min-width="150px">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column label="创建日期" min-width="250px" align="center">
         <template slot-scope="{row}">
           <!-- <span>{{ row.Created | parseTime('{y}-{m}-{d} {h}:{i}') }}</span> -->
@@ -59,7 +54,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="success" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
           <el-button v-if="row.Status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
@@ -130,9 +125,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
+        enabled: 'success',
+        disabled: 'danger'
       }
       return statusMap[status]
     }
