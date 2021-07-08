@@ -7,9 +7,19 @@ export function fetchInstanceList() {
   })
 }
 
-export function addInstance() {
+export function addInstance(data) {
   return request({
-    url: '/tispector/cluster/list',
-    method: 'post'
+    url: '/tispector/cluster/add',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    data
+  })
+}
+
+export function deleteInstanceByID(id) {
+  return request({
+    url: '/tispector/cluster/del',
+    method: 'post',
+    params: { id }
   })
 }

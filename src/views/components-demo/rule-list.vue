@@ -5,7 +5,7 @@
       placeholder="搜索规则"
       style="margin-bottom: 5px; width: 200px;"
     />
-    <el-button type="success" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="fresh">刷新</el-button>
+    <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="fresh">刷新</el-button>
     <el-button type="primary" icon="el-icon-refresh" size="small" round style="margin: 0 0 16px 16px;" @click="reset">重置</el-button>
     <el-button type="warning" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="add">添加</el-button>
     <el-dialog
@@ -105,7 +105,7 @@
       :visible.sync="updateDialogVisible"
       :before-close="cancelUpdate"
     >
-      <el-form ref="NFSForm" label-position="left" label-width="100px" style="width: 500px; margin-left:40px;">
+      <el-form label-position="left" label-width="100px" style="width: 600px; margin-left:60px;">
         <el-form-item label="规则缩写">
           <el-input v-model="ruleItem" :disabled="true" />
         </el-form-item>
