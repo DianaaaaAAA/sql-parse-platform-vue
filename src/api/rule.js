@@ -23,3 +23,10 @@ export function updateRules(data) {
     data
   })
 }
+
+export function resetRuleList() {
+  return request({
+    url: '/tispector/resetRules',
+    method: 'get'
+  })
+}

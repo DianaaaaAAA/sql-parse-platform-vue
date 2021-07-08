@@ -5,7 +5,8 @@
       placeholder="搜索规则"
       style="margin-bottom: 5px; width: 200px;"
     />
-    <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="fresh">刷新</el-button>
+    <el-button type="success" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="fresh">刷新</el-button>
+    <el-button type="primary" icon="el-icon-refresh" size="small" round style="margin: 0 0 16px 16px;" @click="reset">重置</el-button>
     <el-button type="warning" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="add">添加</el-button>
     <el-dialog
       title="添加规则"
@@ -83,7 +84,7 @@
         <template slot-scope="scope">
           <!-- <router-link :to="'/components-demo/rule-edit/index/'+scope.row.id"> -->
           <el-button
-            type="success"
+            type="primary"
             size="small"
             @click="getByItem(scope.row.Item)"
           >
@@ -135,7 +136,7 @@
 </template>
 
 <script>
-import { fetchRuleList, fetchRuleByItem, updateRules } from '@/api/rule'
+import { fetchRuleList, fetchRuleByItem, updateRules, resetRuleList } from '@/api/rule'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -266,6 +267,12 @@ export default {
         message: '该功能暂未启用',
         type: 'warning'
       })
+    },
+    reset() {
+      resetRuleList().then(response => {
+        this.list = response.data.items
+      })
+      this.fresh()
     },
     fresh() {
       this.getList()
