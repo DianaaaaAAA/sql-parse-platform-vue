@@ -35,8 +35,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+        <el-button @click="cancelAdd">取 消</el-button>
+        <el-button type="primary" @click="cancelAdd">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -107,27 +107,27 @@
     >
       <el-form label-position="left" label-width="100px" style="width: 600px; margin-left:60px;">
         <el-form-item label="规则缩写">
-          <el-input v-model="ruleItem" :disabled="true" />
+          <el-input v-model="rule.Item" :disabled="true" />
         </el-form-item>
 
         <el-form-item label="规则名称">
-          <el-input v-model="ruleName" />
+          <el-input v-model="rule.Name" />
         </el-form-item>
 
         <el-form-item label="规则摘要" label-width="100px">
-          <el-input v-model="ruleSummary" type="textarea" :rows="2" />
+          <el-input v-model="rule.Summary" type="textarea" :rows="2" />
         </el-form-item>
 
         <el-form-item label="可变阈值" label-width="100px">
-          <el-input v-model="ruleThreshold" />
+          <el-input v-model="rule.Threshold" />
         </el-form-item>
 
         <el-form-item label="示例" label-width="100px">
-          <el-input v-model="ruleCase" type="textarea" :rows="2" />
+          <el-input v-model="rule.Case" type="textarea" :rows="2" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button @click="cancelUpdate">取 消</el-button>
         <el-button type="primary" @click="updateRule">确 定</el-button>
       </span>
     </el-dialog>
@@ -184,12 +184,9 @@ export default {
         page: 1,
         limit: 20
       },
-      ruleName: '',
-      ruleItem: '',
-      ruleSummary: '',
-      ruleThreshold: '',
-      ruleCase: '',
-      rule: null
+      rule: {
+
+      }
     }
   },
   created() {
@@ -204,26 +201,16 @@ export default {
       })
     },
     getByItem(item) {
-      this.updateDialogVisible = true
+      this.displayUpdate()
       fetchRuleByItem(item).then(response => {
         this.rule = response.data[0]
-        this.ruleName = this.rule.Name
-        this.ruleItem = this.rule.Item
-        this.ruleSummary = this.rule.Summary
-        this.ruleThreshold = this.rule.Threshold
-        this.ruleCase = this.rule.Case
       })
     },
     updateRule() {
-      this.rule.Name = this.ruleName
-      this.rule.Item = this.ruleItem
-      this.rule.Summary = this.ruleSummary
-      this.rule.Threshold = this.ruleThreshold
-      this.rule.Case = this.ruleCase
       var r = JSON.stringify(this.rule)
       updateRules(r).then(response => {
         this.getList()
-        this.updateDialogVisible = false
+        this.cancelUpdate()
         this.$notify({
           title: 'Success',
           message: '修改成功！',
@@ -276,6 +263,13 @@ export default {
     },
     fresh() {
       this.getList()
+    },
+    displayAdd() {
+      this.addDialogVisible = true
+    },
+
+    displayUpdate() {
+      this.updateDialogVisible = true
     },
     cancelAdd(done) {
       this.addDialogVisible = false

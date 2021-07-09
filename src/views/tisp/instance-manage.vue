@@ -35,7 +35,7 @@
           <el-button
             type="primary"
             size="small"
-            @click="displayUpdate"
+            @click="getByName(scope.row.name)"
           >
             编辑
           </el-button>
@@ -56,31 +56,31 @@
       width="50%"
     >
       <el-form
-        ref="addForm"
-        :model="addStr"
-        :rules="addRules"
+        ref="updateForm"
+        :model="updateStr"
+        :rules="updateRules"
         label-position="left"
         label-width="100px"
         style="width: 600px; margin-left:60px;"
       >
         <el-form-item label="集群名称" prop="Name">
-          <el-input v-model="addStr.name" />
+          <el-input v-model="updateStr.name" />
         </el-form-item>
 
         <el-form-item label="集群地址" prop="Host">
-          <el-input v-model="addStr.addr" />
+          <el-input v-model="updateStr.addr" />
         </el-form-item>
 
         <el-form-item label="用户名" prop="User">
-          <el-input v-model="addStr.user" />
+          <el-input v-model="updateStr.user" />
         </el-form-item>
 
         <el-form-item label="密码" prop="Password">
-          <el-input v-model="addStr.pwd" />
+          <el-input v-model="updateStr.pwd" />
         </el-form-item>
 
         <el-form-item label="描述" prop="Description">
-          <el-input v-model="addStr.description" type="textarea" :rows="2" />
+          <el-input v-model="updateStr.description" type="textarea" :rows="2" />
         </el-form-item>
 
       </el-form>
@@ -93,7 +93,7 @@
         </el-button>
         <el-button
           type="primary"
-          @click="addInstance"
+          @click="updateInstance"
         >
           确认
         </el-button>
@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import { fetchInstanceList, addInstance, deleteInstanceByID } from '@/api/instance'
+import { fetchInstanceList, addInstance, deleteInstanceByID, fetchClusterByName, updateInstances } from '@/api/instance'
 
 export default {
   name: 'InlineEditTable',
@@ -233,13 +233,29 @@ export default {
         this.getList()
       })
     },
-    updateInstance() {
-
+    getByName(name) {
+      fetchClusterByName(name).then(response => {
+        this.displayUpdate()
+        this.updateStr = response.data[0]
+      })
     },
     deleteInstance(id) {
       deleteInstanceByID(id).then(response => {
         this.$message.success('删除成功')
         this.getList()
+      })
+    },
+    updateInstance() {
+      var r = JSON.stringify(this.updateStr)
+      updateInstances(r).then(response => {
+        this.getList()
+        this.cancelUpdate()
+        this.$notify({
+          title: 'Success',
+          message: '修改成功！',
+          type: 'success',
+          duration: 2000
+        })
       })
     },
     monitor(row) {
