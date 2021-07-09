@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchUsersList() {
+export function fetchUsersList(query) {
   return request({
     url: '/tisp/user',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

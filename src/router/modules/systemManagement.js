@@ -13,19 +13,19 @@ const systemManagementRouter = {
   children: [
     {
       path: 'user-manage-table',
-      component: () => import('@/views/table/user-manage-table'),
+      component: () => import('@/views/tisp/user-manage-table'),
       name: 'UserManagement',
       meta: { title: '用户管理', icon: 'el-icon-user' }
     },
     {
       path: 'role-manage-table',
-      component: () => import('@/views/table/role-manage-table'),
+      component: () => import('@/views/tisp/role-manage-table'),
       name: 'RoleManagement',
       meta: { title: '角色管理', icon: 'el-icon-s-custom' }
     },
     {
       path: 'action-table',
-      component: () => import('@/views/table/action-table'),
+      component: () => import('@/views/tisp/action-table'),
       name: 'Action',
       meta: { title: '操作记录', icon: 'el-icon-document' }
     }
