@@ -88,7 +88,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="Status" placeholder="请选择角色状态">
-          <el-select v-model="addChara.Status" class="filter-item" >
+          <el-select v-model="addChara.Status" class="filter-item">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
@@ -113,9 +113,9 @@
 </template>
 
 <script>
-import { fetchCharaList, createChara, updateChara } from '@/api/chara'
+import { fetchCharaList, updateChara } from '@/api/chara'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
+// import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -141,7 +141,7 @@ export default {
       },
       CharacterOptions: ['User', 'Admin', 'DBA'],
       PermissionOptions: [1, 2, 3],
-      statusOptions:['enabled', 'disabled'],
+      statusOptions: ['enabled', 'disabled'],
       dialogStatus: '',
       addFormVisible: false,
       addChara: {
@@ -171,7 +171,7 @@ export default {
       this.addFormVisible = false
     },
     add() {
-      addUser().then(response => {
+      this.addUser().then(response => {
         this.$message.success('操作成功')
         this.cancelAdd()
       })
@@ -196,6 +196,8 @@ export default {
         if (valid) {
           const charaData = Object.assign({}, this.addChara)
           updateChara(charaData).then(() => {
+            // FIXME: index not defined here
+            const index = 1
             this.list.splice(index, 1, this.addChara)
             this.addFormVisible = false
             this.$notify({
@@ -216,7 +218,7 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
-    },
+    }
     // handleDownload() {
     //   this.downloadLoading = true
     //   import('@/vendor/Export2Excel').then(excel => {

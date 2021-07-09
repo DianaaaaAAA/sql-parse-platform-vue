@@ -66,7 +66,7 @@
           <el-button type="success" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button  size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -98,7 +98,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="权限等级" prop="Permission">
-          <el-input v-model="addUser.Permission" type="number" :min="1" :max="3" style="margin-top:8px;"/>
+          <el-input v-model="addUser.Permission" type="number" :min="1" :max="3" style="margin-top:8px;" />
         </el-form-item>
         <el-form-item label="用户状态" prop="Status">
           <el-select v-model="addUser.Status" class="filter-item">
@@ -125,9 +125,9 @@
 </template>
 
 <script>
-import { fetchUsersList, creatUser, updateUser} from '@/api/users.js'
+import { fetchUsersList, updateUser } from '@/api/users.js'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
+// import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -161,7 +161,7 @@ export default {
       PermissionOptions: ['1', '2', '3'],
       StatusOptions: ['online', 'offline'],
       addRules: {
-        title: [{ required: true, message: '用户名必须输入', trigger: 'change' }],
+        title: [{ required: true, message: '用户名必须输入', trigger: 'change' }]
       },
       downloadLoading: false
     }
@@ -202,7 +202,7 @@ export default {
       this.addFormVisible = false
     },
     add() {
-      addUser().then(response => {
+      this.addUser().then(response => {
         this.$message.success('操作成功')
         this.cancelAdd()
       })
@@ -224,6 +224,8 @@ export default {
         if (valid) {
           const userData = Object.assign({}, this.addUser)
           updateUser(userData).then(() => {
+            // FIXME: index not defined here
+            const index = 1
             this.list.splice(index, 1, this.addUser)
             this.addFormVisible = false
             this.$notify({
@@ -245,7 +247,7 @@ export default {
       })
       this.list.splice(index, 1)
     },
-    //待完善，目前无法下载内容
+    // 待完善，目前无法下载内容
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
@@ -262,8 +264,7 @@ export default {
     },
     formatJson(filterVal) {
       return this.list.map(v => filterVal.map(j => {
-          return v[j]
-
+        return v[j]
       }))
     }
   }

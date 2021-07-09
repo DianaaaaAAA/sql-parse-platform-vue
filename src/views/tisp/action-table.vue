@@ -61,7 +61,7 @@
 import { fetchActionList } from '@/api/action'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
+// import { parseTime } from '@/utils'
 
 export default {
   name: 'ActionTable',

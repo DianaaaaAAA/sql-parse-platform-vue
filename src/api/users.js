@@ -12,7 +12,7 @@ export function createUser(data) {
   return request({
     url: '/tisp/user',
     method: 'post',
-    msg
+    data
   })
 }
 
@@ -20,6 +20,6 @@ export function updateUser(data) {
   return request({
     url: '/tisp/user',
     method: 'put',
-    msg
+    data
   })
 }
