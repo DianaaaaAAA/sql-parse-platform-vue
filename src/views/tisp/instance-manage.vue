@@ -21,14 +21,6 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column class-name="status-col" align="center" label="状态" width="200">
-        <template slot-scope="{row}">
-          <el-tag :type="row.Status | statusFilter">
-            {{ row.Status }}
-          </el-tag>
-        </template>
-      </el-table-column> -->
-
       <el-table-column label="管理" align="center" width="200px">
         <template slot-scope="scope">
           <!-- <router-link :to="'/components-demo/rule-edit/index/'+scope.row.id"> -->

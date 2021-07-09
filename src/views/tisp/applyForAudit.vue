@@ -21,17 +21,17 @@
               />
             </el-tab-pane>
             <el-tab-pane name="second">
-              <span slot="label">实例配置
+              <span slot="label">集群配置
                 <i v-if="paneInstanceValid" class="el-icon-check" style="color: #008000;" />
                 <i v-else class="el-icon-warning" style="color: red;" />
               </span>
-              <el-form-item label="实例选择">
+              <el-form-item label="集群选择">
                 <el-select v-model="auditStr.instance" placeholder="请选择">
                   <el-option
                     v-for="item in instanceList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
                   />
                 </el-select>
               </el-form-item>
@@ -100,6 +100,7 @@
 <script>
 
 import { fetchRuleList } from '@/api/rule'
+import { fetchInstanceList } from '@/api/instance'
 
 export default {
   name: 'ApplyForAudit',
@@ -121,7 +122,6 @@ export default {
       paneSQLTextValid: false,
 
       script: 'fake.txt',
-
       auditStr: {
         rules: [],
         instance: '',
@@ -159,8 +159,6 @@ export default {
         }
       }
 
-      console.log('map', map)
-
       const res = []
       Object.keys(map).forEach(key => {
         res.push({
@@ -168,16 +166,20 @@ export default {
           children: map[key]
         })
       })
-
-      console.log('res', res)
       return res
     }
   },
   watch: {},
   created() {
+    this.fetchInstances()
     this.fetchRules()
   },
   methods: {
+    fetchInstances() {
+      fetchInstanceList().then(response => {
+        this.instanceList = response.data.items
+      })
+    },
     fetchRules() {
       fetchRuleList().then(response => {
         this.ruleList = response.data
