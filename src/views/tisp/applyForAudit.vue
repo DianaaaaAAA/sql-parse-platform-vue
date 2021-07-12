@@ -334,14 +334,15 @@ export default {
     removeResultTab(targetName) {
       console.log(targetName)
       if (this.activeTab === targetName) {
-        this.activeTab === 'finish'
+        this.activeTab = 'finish'
       }
       for (let i = 0; i < this.auditResultTabs.length; i++) {
         if (this.auditResultTabs[i].name === targetName) {
-          this.auditResultTabs.slice(i, 1)
+          this.auditResultTabs.splice(i, 1)
           break
         }
       }
+      console.log(this.auditResultTabs)
     }
   }
 }
