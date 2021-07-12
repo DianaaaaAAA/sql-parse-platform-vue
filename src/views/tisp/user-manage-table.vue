@@ -11,7 +11,7 @@
       <el-button class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="warning" icon="el-icon-circle-plus-outline" @click="displayAdd">
         增加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" size="small" round style="margin: 0 0 16px 16px;" type="success" icon="el-icon-download" @click="handleDownload">
+      <el-button v-waves :loading="downloadLoading" class="filter-item" size="small" round style="margin: 0 0 16px 16px;" type="warning" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
     </div>
@@ -43,7 +43,7 @@
           <!-- <el-tag>{{ row.type | typeFilter }}</el-tag> -->
         </template>
       </el-table-column>
-      <el-table-column label="最新登录时间" min-width="250px" align="center">
+      <el-table-column label="最新登录时间" width="355px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.LastLogin }}</span>
         </template>
@@ -61,12 +61,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="success" size="mini" @click="handleUpdate(row)">
+          <el-button type="primary" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button type="danger" size="small" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -80,6 +80,7 @@
       :title="dialogStatus"
       :visible.sync="addFormVisible"
       :before-close="cancelAdd"
+      width="30%"
     >
       <el-form
         ref="addForm"
@@ -89,18 +90,18 @@
         label-width="70px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="用户名" prop="Name">
+        <el-form-item label="用户名" label-position="left" label-width="100px" style="width: 295px;" prop="Name">
           <el-input v-model="addUser.Name" placeholder="请输入用户名" />
         </el-form-item>
-        <el-form-item label="角色" prop="Character">
+        <el-form-item label="角色" prop="Character" label-position="left" label-width="100px" style="width: 295px;">
           <el-select v-model="addUser.Character" class="filter-item">
             <el-option v-for="item in CharacterOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="权限等级" prop="Permission">
+        <el-form-item label="权限等级" prop="Permission" label-position="left" label-width="100px" style="width: 295px;">
           <el-input v-model="addUser.Permission" type="number" :min="1" :max="3" style="margin-top:8px;" />
         </el-form-item>
-        <el-form-item label="用户状态" prop="Status">
+        <el-form-item label="用户状态" prop="Status" label-position="left" label-width="100px" style="width: 295px;">
           <el-select v-model="addUser.Status" class="filter-item">
             <el-option v-for="item in StatusOptions" :key="item" :label="item" :value="item" />
           </el-select>
@@ -192,10 +193,6 @@ export default {
     },
     displayAdd() {
       this.addFormVisible = true
-      this.$message({
-        message: '该功能暂未启用',
-        type: 'warning'
-      })
     },
     cancelAdd() {
       this.addUser = {}

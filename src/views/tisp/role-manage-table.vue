@@ -10,7 +10,7 @@
       <el-button class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="warning" icon="el-icon-circle-plus-outline" @click="displayAdd">
         增加
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" size="small" round style="margin: 0 0 16px 16px;" type="success" icon="el-icon-download" @click="handleDownload">
+      <el-button v-waves :loading="downloadLoading" class="filter-item" size="small" round style="margin: 0 0 16px 16px;" type="warning" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
     </div>
@@ -54,10 +54,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="success" size="mini" @click="handleUpdate(row)">
+          <el-button type="primary" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.Status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-if="row.Status!='deleted'" size="small" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -66,28 +66,28 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog
-      :title="dialogStatus"
+      title="添加角色"
       :visible.sync="addFormVisible"
       :before-close="cancelAdd"
+      width="30%"
     >
       <el-form
         ref="addForm"
+        title="添加角色"
         :model="addChara"
         :rules="addrules"
         label-position="left"
         label-width="70px"
       >
-        <el-form-item label="角色" prop="Name" placeholder="请选择用户角色">
-          <el-select v-model="addChara.Name" class="filter-item">
-            <el-option v-for="item in CharacterOptions" :key="item" :label="item" :value="item" />
-          </el-select>
+        <el-form-item label="角色" label-position="left" label-width="100px" style="width: 295px; margin-left:60px;">
+          <el-input />
         </el-form-item>
-        <el-form-item label="权限等级" prop="Permission" placeholder="请选择权限等级">
+        <el-form-item label="权限等级" label-position="left" label-width="100px" style="width: 600px; margin-left:60px;" prop="Permission" placeholder="请选择权限等级">
           <el-select v-model="addChara.Permission" class="filter-item">
             <el-option v-for="item in PermissionOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="状态" prop="Status" placeholder="请选择角色状态">
+        <el-form-item label="状态" label-position="left" label-width="100px" style="width: 600px; margin-left:60px;" prop="Status" placeholder="请选择角色状态">
           <el-select v-model="addChara.Status" class="filter-item">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
