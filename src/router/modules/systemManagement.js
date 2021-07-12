@@ -1,7 +1,7 @@
 import Layout from '@/layout'
 
 const systemManagementRouter = {
-  path: '/tisp',
+  path: '/system',
   component: Layout,
   // redirect: '/table/complex-table',
   redirect: 'noRedirect',
