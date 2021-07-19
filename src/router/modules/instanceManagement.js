@@ -8,7 +8,7 @@ const instanceManagementRouter = {
       path: 'inline-edit-table',
       component: () => import('@/views/tisp/instance-manage'),
       name: 'InstanceSelected',
-      meta: { title: '实例选择', icon: 'el-icon-copy-document', noCache: true }
+      meta: { title: '集群管理', icon: 'el-icon-copy-document', noCache: true }
     }
   ]
 }

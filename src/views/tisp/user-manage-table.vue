@@ -8,7 +8,7 @@
       <el-button v-waves class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
       </el-button>
-      <el-button class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="warning" icon="el-icon-circle-plus-outline" @click="displayAdd">
+      <el-button class="filter-item" round style="margin: 0 0 16px 16px;" size="small" type="warning" icon="el-icon-circle-plus-outline" @click="handleAdd">
         增加
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" size="small" round style="margin: 0 0 16px 16px;" type="warning" icon="el-icon-download" @click="handleDownload">
@@ -207,11 +207,17 @@ export default {
     monitor(row) {
 
     },
-
+    handleAdd(row) {
+      this.addFormVisible = true
+      this.dialogStatus = '添加用户信息'
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
     handleUpdate(row) {
       this.addFormVisible = true
       this.addUser = Object.assign({}, row) // copy obj
-      this.dialogStatus = '修改信息'
+      this.dialogStatus = '修改用户信息'
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
