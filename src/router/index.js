@@ -87,9 +87,9 @@ export const constantRoutes = [
   },
   ruleManagementRouter,
   instanceManagementRouter,
-  sqlTextManagementRouter,
+  // sqlTextManagementRouter,
   sqlAuditRouter,
-  systemManagementRouter,
+  // systemManagementRouter,
   {
     path: '/guide',
     component: Layout,
