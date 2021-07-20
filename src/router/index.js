@@ -8,10 +8,10 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import ruleManagementRouter from './modules/ruleManagement'
-import sqlTextManagementRouter from './modules/sqlTextManagement'
+// import sqlTextManagementRouter from './modules/sqlTextManagement'
 import sqlAuditRouter from './modules/sqlAudit'
 import instanceManagementRouter from './modules/instanceManagement'
-import systemManagementRouter from './modules/systemManagement'
+// import systemManagementRouter from './modules/systemManagement'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -72,36 +72,36 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: '首页',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   // redirect: '/dashboard',
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       component: () => import('@/views/dashboard/index'),
+  //       name: '首页',
+  //       meta: { title: '首页', icon: 'dashboard', affix: true }
+  //     }
+  //   ]
+  // },
   ruleManagementRouter,
   instanceManagementRouter,
   // sqlTextManagementRouter,
   sqlAuditRouter,
   // systemManagementRouter,
-  {
-    path: '/guide',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: '页面导航',
-        meta: { title: '页面导航', icon: 'guide', affix: true }
-      }
-    ]
-  }
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/guide/index'),
+  //       name: '页面导航',
+  //       meta: { title: '页面导航', icon: 'guide', affix: true }
+  //     }
+  //   ]
+  // }
 ]
 
 /**
