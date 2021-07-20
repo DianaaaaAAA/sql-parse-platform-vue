@@ -78,14 +78,14 @@ export const constantRoutes = [
     // redirect: '/dashboard',
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: '首页',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        path: 'views',
+        component: () => import('@/views/tisp/rule-list'),
+        name: '规则管理',
+        meta: { title: '规则管理', icon: 'dashboard', affix: true }
       }
     ]
   },
-  ruleManagementRouter,
+  // ruleManagementRouter,
   instanceManagementRouter,
   // sqlTextManagementRouter,
   sqlAuditRouter,
