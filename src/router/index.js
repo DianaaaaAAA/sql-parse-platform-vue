@@ -72,19 +72,19 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   // redirect: '/dashboard',
-  //   children: [
-  //     {
-  //       path: 'dashboard',
-  //       component: () => import('@/views/dashboard/index'),
-  //       name: '首页',
-  //       meta: { title: '首页', icon: 'dashboard', affix: true }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/',
+    component: Layout,
+    // redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: '首页',
+        meta: { title: '首页', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
   ruleManagementRouter,
   instanceManagementRouter,
   // sqlTextManagementRouter,
