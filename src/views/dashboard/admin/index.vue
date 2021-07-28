@@ -11,7 +11,7 @@
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="12">
-         <transaction-table />
+        <transaction-table />
       </el-col>
     </el-row>
 

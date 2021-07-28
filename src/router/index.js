@@ -8,7 +8,7 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import ruleManagementRouter from './modules/ruleManagement'
-// import sqlTextManagementRouter from './modules/sqlTextManagement'
+import sqlTextManagementRouter from './modules/sqlTextManagement'
 import sqlAuditRouter from './modules/sqlAudit'
 import instanceManagementRouter from './modules/instanceManagement'
 // import systemManagementRouter from './modules/systemManagement'
@@ -87,8 +87,8 @@ export const constantRoutes = [
   },
   ruleManagementRouter,
   instanceManagementRouter,
-  // sqlTextManagementRouter,
-  sqlAuditRouter,
+  sqlTextManagementRouter,
+  sqlAuditRouter
   // systemManagementRouter,
   // {
   //   path: '/guide',

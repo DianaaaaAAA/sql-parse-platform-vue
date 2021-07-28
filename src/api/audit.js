@@ -7,9 +7,18 @@ export function fetchAuditList() {
   })
 }
 
-export function auditSql(data) {
+export function auditSqlWithText(data) {
   return request({
-    url: 'tispector/checksql',
+    url: 'tispector/checksqlbyrules',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    data
+  })
+}
+
+export function auditSqlWithFile(data) {
+  return request({
+    url: 'tispector/file/checksqlfile',
     method: 'post',
     headers: { 'Content-Type': 'text/plain' },
     data
