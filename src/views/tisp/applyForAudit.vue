@@ -4,7 +4,7 @@
       <el-col :span="22">
         <el-form ref="editForm" :model="auditStr">
           <el-tabs v-model="activeTab" type="card" @tab-remove="removeResultTab">
-            <!-- <el-tab-pane name="first">
+            <el-tab-pane name="first">
               <span slot="label">规则配置
                 <i v-if="paneRuleValid" class="el-icon-check" style="color: #008000;" />
                 <i v-else class="el-icon-warning" style="color: red;" />
@@ -21,7 +21,7 @@
                 :default-expanded-keys="['SQL']"
                 :default-checked-keys="['SQL']"
               />
-            </el-tab-pane> -->
+            </el-tab-pane>
             <el-tab-pane name="second">
               <span slot="label">集群配置
                 <i v-if="paneInstanceValid" class="el-icon-check" style="color: #008000;" />
@@ -50,31 +50,41 @@
                 <i v-if="paneSQLTextValid" class="el-icon-check" style="color: #008000;" />
                 <i v-else class="el-icon-warning" style="color: red;" />
               </span>
-              <el-form-item label="脚本语句">
-                <el-input
-                  v-model="auditStr.Content"
-                  type="textarea"
-                  autosize
-                />
-              </el-form-item>
-              <!-- <el-form-item label="脚本选择">
-                <el-select v-model="auditStr.instance" placeholder="请选择">
+              <el-form-item label="上传方式" prop="Type">
+                <el-select v-model="uploadType" placeholder="请选择">
                   <el-option
-                    v-for="item in instanceList"
+                    v-for="item in uploadTypeOption"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   />
                 </el-select>
               </el-form-item>
-              <el-form-item label="脚本预览">
+              <el-form-item v-if="uploadType==='text'" label="脚本语句">
+                <el-input
+                  v-model="auditStr.Content"
+                  type="textarea"
+                  autosize
+                />
+              </el-form-item>
+              <el-form-item v-if="uploadType==='file'" label="脚本选择">
+                <el-select v-model="auditStr.Name" placeholder="请选择">
+                  <el-option
+                    v-for="item in fileList"
+                    :key="item.Name"
+                    :label="item.Name + ' 创建于 ' + item.Ct"
+                    :value="item.Name"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item v-if="uploadType==='file'" label="脚本预览">
                 <el-input
                   v-model="sqlTextPreview"
                   type="textarea"
                   autosize
                   :disabled="true"
                 />
-              </el-form-item> -->
+              </el-form-item>
             </el-tab-pane>
             <el-tab-pane name="finish">
               <span slot="label">核对
@@ -85,22 +95,26 @@
                 <el-col :span="24">总览</el-col>
               </el-row>
               <el-row class="summary_item">
-                <el-col :span="24"><b>规则预览</b></el-col>
+                <el-col :span="24"><b>规则选择</b></el-col>
                 <span
-                  v-for="appliedRule in appliedRules"
-                  :key="appliedRule.Item"
+                  v-for="overview in ruleOverview"
+                  :key="overview.Item"
                 >
-                  {{ appliedRule.Item }} - {{ appliedRule.Name }}
+                  {{ overview.Item }} - {{ overview.Name }}
                   <br>
                 </span>
               </el-row>
               <el-row class="summary_item">
-                <el-col :span="4"><b>实例预览</b></el-col>
+                <el-col :span="4"><b>实例选择</b></el-col>
                 <el-col :span="10"> 所选集群： {{ auditStr.ClusterName }} </el-col>
                 <el-col :span="10"> 所选数据库： {{ auditStr.DbName }} </el-col>
               </el-row>
-              <el-row class="summary_item">
-                <el-col :span="4"><b>脚本预览</b></el-col>
+              <el-row v-if="uploadType==='file'" class="summary_item">
+                <el-col :span="4"><b>脚本选择</b></el-col>
+                <el-col :span="20"> {{ auditStr.Name }} </el-col>
+              </el-row>
+              <el-row v-if="uploadType==='text'" class="summary_item">
+                <el-col :span="4"><b>脚本内容</b></el-col>
                 <el-col :span="20"> {{ auditStr.Content }} </el-col>
               </el-row>
               <br>
@@ -124,17 +138,26 @@
               <el-row class="summary_head">
                 <el-col :span="24">审核结果</el-col>
               </el-row>
-              <el-table :data="auditResultTab.result" style="width: 100%">
-                <el-table-column prop="Pass" label="是否通过" width="80">
-                  <template slot-scope="scope">
-                    <i v-if="scope.row.Pass" class="el-icon-check" style="color: #008000;" />
-                    <i v-else class="el-icon-warning" style="color: red;" />
-                  </template>
-                </el-table-column>
-                <el-table-column prop="Suggestion" label="审核建议" />
-                <el-table-column prop="AffectRow" label="影响行数" width="80" />
-                <el-table-column prop="ItemName" label="触发规则" />
-              </el-table>
+
+              <el-row
+                v-for="result in auditResultTab.results"
+                :key="result.sql"
+              >
+                <hr>
+                <el-col :span="24"> 审核SQL语句: <b> {{ result.sql }} </b></el-col>
+                <el-table :data="result.Results" style="width: 100%">
+
+                  <el-table-column prop="Pass" label="是否通过" width="80">
+                    <template slot-scope="scope">
+                      <i v-if="scope.row.Pass" class="el-icon-check" style="color: #008000;" />
+                      <i v-else class="el-icon-warning" style="color: red;" />
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="Suggestion" label="审核建议" />
+                  <el-table-column prop="AffectRow" label="影响行数" width="80" />
+                  <el-table-column prop="ItemName" label="触发规则" />
+                </el-table>
+              </el-row>
 
               <el-row class="summary_head">
                 <el-col :span="24">审核总览</el-col>
@@ -142,21 +165,21 @@
               <el-row class="summary_item">
                 <el-col :span="24"><b>规则预览</b></el-col>
                 <span
-                  v-for="appliedRule in appliedRules"
-                  :key="appliedRule.Item"
+                  v-for="overview in auditResultTab.overview"
+                  :key="overview.Item"
                 >
-                  {{ appliedRule.Item }} - {{ appliedRule.Name }}
+                  {{ overview.Item }} - {{ overview.Name }}
                   <br>
                 </span>
               </el-row>
               <el-row class="summary_item">
                 <el-col :span="4"><b>实例预览</b></el-col>
-                <el-col :span="10"> 所选集群： {{ auditStr.ClusterName }} </el-col>
-                <el-col :span="10"> 所选数据库： {{ auditStr.DbName }} </el-col>
+                <el-col :span="10"> 所选集群： {{ auditResultTab.request.ClusterName }} </el-col>
+                <el-col :span="10"> 所选数据库： {{ auditResultTab.request.DbName }} </el-col>
               </el-row>
               <el-row class="summary_item">
                 <el-col :span="4"><b>脚本预览</b></el-col>
-                <el-col :span="20"> {{ auditStr.Content }} </el-col>
+                <el-col :span="20"> {{ auditResultTab.request.Content }} {{ auditResultTab.request.Name }} </el-col>
               </el-row>
             </el-tab-pane>
           </el-tabs>
@@ -168,18 +191,18 @@
 
 <script>
 
-import { fetchRuleList, updateRules } from '@/api/rule'
+import { fetchRuleList } from '@/api/rule'
 import { fetchInstanceList } from '@/api/instance'
-import { auditSql } from '@/api/audit'
+import { fetchSQLTextList } from '@/api/sql-text'
+import { auditSqlWithText, auditSqlWithFile } from '@/api/audit'
 
 export default {
   name: 'ApplyForAudit',
   filters: {},
   data() {
     return {
-      activeTab: 'second',
+      activeTab: 'first',
       tabIndex: 0,
-      paneRuleValid: false,
 
       defaultProps: {
         children: 'children',
@@ -188,13 +211,23 @@ export default {
 
       ruleList: [],
       instanceList: [],
-      // appliedRules: [],
-      enabledRules: [],
+      fileList: [],
+
+      ruleOverview: [],
+
+      uploadTypeOption: [
+        { label: '输入SQL文本', value: 'text' },
+        { label: '上传SQL脚本', value: 'file' }
+      ],
+      uploadType: 'file',
+      sqlTextPreview: '当前不支持脚本预览功能',
 
       auditStr: {
+        RuleItems: [],
         DbName: '',
         ClusterName: '',
-        Content: ''
+        Content: '',
+        Name: ''
       },
 
       resultVisible: false,
@@ -202,37 +235,40 @@ export default {
     }
   },
   computed: {
+    paneRuleValid: function() {
+      return this.auditStr.RuleItems.length > 0
+    },
     paneInstanceValid: function() {
       return this.auditStr.ClusterName !== '' && this.auditStr.DbName !== ''
     },
     paneSQLTextValid: function() {
-      return this.auditStr.Content
+      return this.auditStr.Content || this.auditStr.Name
     },
     paneFinalValid: function() {
-      return this.paneInstanceValid && this.paneSQLTextValid
+      return this.paneRuleValid && this.paneInstanceValid && this.paneSQLTextValid
     },
-    // groupedRules: function() {
-    //   const map = {}
-    //   for (let i = 0; i < this.ruleList.length; i++) {
-    //     const temp = this.ruleList[i]
-    //     this.$set(temp, 'label', temp.Name + ' - (' + temp.Summary + ')')
-    //     const key = temp.Item.split('.')[0]
-    //     if (!map[key]) {
-    //       map[key] = [temp]
-    //     } else {
-    //       map[key].push(temp)
-    //     }
-    //   }
+    groupedRules: function() {
+      const map = {}
+      for (let i = 0; i < this.ruleList.length; i++) {
+        const temp = this.ruleList[i]
+        this.$set(temp, 'label', temp.Name + ' - (' + temp.Summary + ')')
+        const key = temp.Item.split('.')[0]
+        if (!map[key]) {
+          map[key] = [temp]
+        } else {
+          map[key].push(temp)
+        }
+      }
 
-    //   const res = []
-    //   Object.keys(map).forEach(key => {
-    //     res.push({
-    //       label: key,
-    //       children: map[key]
-    //     })
-    //   })
-    //   return [{ label: 'SQL', children: res }]
-    // }
+      const res = []
+      Object.keys(map).forEach(key => {
+        res.push({
+          label: key,
+          children: map[key]
+        })
+      })
+      return [{ label: 'SQL', children: res }]
+    },
     appliedRules: function() {
       const res = []
       for (let i = 0; i < this.ruleList.length; i++) {
@@ -246,85 +282,101 @@ export default {
 
   watch: {},
   created() {
-    this.fetchInstances()
     this.fetchRules()
+    this.fetchInstances()
+    this.fetchFiles()
   },
   methods: {
+    fetchRules() {
+      fetchRuleList().then(response => {
+        this.ruleList = response.data.items
+      })
+    },
+
     fetchInstances() {
       fetchInstanceList().then(response => {
         this.instanceList = response.data.items
       })
     },
-    fetchRules() {
-      this.enabledRules = []
-      fetchRuleList().then(response => {
-        this.ruleList = response.data.items
-        for (let i = 0; i < this.ruleList.length; i++) {
-          if (this.ruleList[i].Close === 1) {
-            this.enabledRules.push(this.ruleList[i])
-          }
-        }
+
+    fetchFiles() {
+      fetchSQLTextList().then(response => {
+        this.fileList = response.data.items
       })
     },
 
     applyRules() {
-      this.enabledRules.forEach(element => {
+      this.auditStr.RuleItems = []
+      this.ruleOverview = this.$refs.tree.getCheckedNodes(true, false)
+      this.ruleOverview.forEach(element => {
         if (!element.children) {
-          element.Close = 0
-          this.$delete(element, 'label')
-          var str = JSON.stringify(element)
-          updateRules(str).then().catch(error => {
-            this.$message({
-              message: error,
-              type: 'warning'
-            })
-          })
+          this.auditStr.RuleItems.push(element.Item)
         }
       })
-      var selectedRules = this.$refs.tree.getCheckedNodes(true, false)
-      selectedRules.forEach(element => {
-        if (!element.children) {
-          element.Close = 1
-          this.$delete(element, 'label')
-          var str = JSON.stringify(element)
-          updateRules(str).then().catch(error => {
-            this.$message({
-              message: error,
-              type: 'warning'
-            })
-          })
-        }
-      })
-      this.fetchRules()
+      this.activeTab = 'second'
     },
 
     applyAuditOrder() {
-      // applyAuditOrder
-      this.auditStr
-      var r = JSON.stringify(this.auditStr)
-      auditSql(r).then(response => {
+      if (this.uploadType === 'text') {
+        const temp = {
+          RuleItems: this.auditStr.RuleItems,
+          DbName: this.auditStr.DbName,
+          ClusterName: this.auditStr.ClusterName,
+          Content: this.auditStr.Content
+        }
+        const r = JSON.stringify(temp)
+        auditSqlWithText(r).then(response => {
         // this.getList()
-        this.$notify({
-          title: 'Success',
-          message: '提交审核请求成功！',
-          type: 'success',
-          duration: 2000
+          this.$notify({
+            title: 'Success',
+            message: '提交审核请求成功！',
+            type: 'success',
+            duration: 2000
+          })
+          this.addResultTab(this.auditStr, JSON.parse(response.data))
         })
-        this.addResultTab(this.auditStr, JSON.parse(response.data))
+      } else {
+        const temp = {
+          RuleItems: this.auditStr.RuleItems,
+          DbName: this.auditStr.DbName,
+          ClusterName: this.auditStr.ClusterName,
+          Name: this.auditStr.Name
+        }
+        const r = JSON.stringify(temp)
+        auditSqlWithFile(r).then(response => {
+        // this.getList()
+          this.$notify({
+            title: 'Success',
+            message: '提交审核请求成功！',
+            type: 'success',
+            duration: 2000
+          })
+          this.addResultTab(this.auditStr, JSON.parse(response.data))
         // this.resultVisible = true
-      })
-      // redirect to AuditManagment
-      // this.$router.push({
-      //   path: '/tisp/sql-audit-manage'
-      // })
+        })
+      }
     },
 
     addResultTab(req, res) {
+      let results = []
+      // console.log('res', res)
+      if (this.uploadType === 'file') {
+        results = res
+      } else {
+        results.push({
+          sql: req.Content,
+          Results: res
+        })
+      }
+      // console.log('results', results)
+
       const newTabName = ++this.tabIndex + ''
       this.auditResultTabs.push({
         title: req.Content,
         name: newTabName,
-        result: res
+        overview: JSON.parse(JSON.stringify(this.ruleOverview)),
+        request: JSON.parse(JSON.stringify(req)),
+        results: JSON.parse(JSON.stringify(results))
       })
 
       // console.log(this.auditResultTabs)
@@ -332,7 +384,7 @@ export default {
     },
 
     removeResultTab(targetName) {
-      console.log(targetName)
+      // console.log(targetName)
       if (this.activeTab === targetName) {
         this.activeTab = 'finish'
       }
@@ -342,7 +394,7 @@ export default {
           break
         }
       }
-      console.log(this.auditResultTabs)
+      // console.log(this.auditResultTabs)
     }
   }
 }
