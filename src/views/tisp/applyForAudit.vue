@@ -4,7 +4,7 @@
       <el-col :span="22">
         <el-form ref="editForm" :model="auditStr">
           <el-tabs v-model="activeTab" type="card" @tab-remove="removeResultTab">
-            <!-- <el-tab-pane name="first">
+            <el-tab-pane name="first">
               <span slot="label">规则配置
                 <i v-if="paneRuleValid" class="el-icon-check" style="color: #008000;" />
                 <i v-else class="el-icon-warning" style="color: red;" />
@@ -21,7 +21,7 @@
                 :default-expanded-keys="['SQL']"
                 :default-checked-keys="['SQL']"
               />
-            </el-tab-pane> -->
+            </el-tab-pane>
             <el-tab-pane name="second">
               <span slot="label">集群配置
                 <i v-if="paneInstanceValid" class="el-icon-check" style="color: #008000;" />
@@ -211,28 +211,28 @@ export default {
     paneFinalValid: function() {
       return this.paneInstanceValid && this.paneSQLTextValid
     },
-    // groupedRules: function() {
-    //   const map = {}
-    //   for (let i = 0; i < this.ruleList.length; i++) {
-    //     const temp = this.ruleList[i]
-    //     this.$set(temp, 'label', temp.Name + ' - (' + temp.Summary + ')')
-    //     const key = temp.Item.split('.')[0]
-    //     if (!map[key]) {
-    //       map[key] = [temp]
-    //     } else {
-    //       map[key].push(temp)
-    //     }
-    //   }
+    groupedRules: function() {
+      const map = {}
+      for (let i = 0; i < this.ruleList.length; i++) {
+        const temp = this.ruleList[i]
+        this.$set(temp, 'label', temp.Name + ' - (' + temp.Summary + ')')
+        const key = temp.Item.split('.')[0]
+        if (!map[key]) {
+          map[key] = [temp]
+        } else {
+          map[key].push(temp)
+        }
+      }
 
-    //   const res = []
-    //   Object.keys(map).forEach(key => {
-    //     res.push({
-    //       label: key,
-    //       children: map[key]
-    //     })
-    //   })
-    //   return [{ label: 'SQL', children: res }]
-    // }
+      const res = []
+      Object.keys(map).forEach(key => {
+        res.push({
+          label: key,
+          children: map[key]
+        })
+      })
+      return [{ label: 'SQL', children: res }]
+    },
     appliedRules: function() {
       const res = []
       for (let i = 0; i < this.ruleList.length; i++) {
