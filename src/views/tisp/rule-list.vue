@@ -7,7 +7,7 @@
     />
     <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="fresh">刷新</el-button>
     <el-button type="primary" icon="el-icon-refresh" size="small" round style="margin: 0 0 16px 16px;" @click="reset">重置</el-button>
-    <el-button type="warning" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="add">添加</el-button>
+    <!-- <el-button type="warning" icon="el-icon-circle-plus-outline" size="small" round style="margin: 0 0 16px 16px;" @click="add">添加</el-button> -->
     <el-dialog
       title="添加规则"
       :visible.sync="addDialogVisible"
