@@ -75,17 +75,9 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    // redirect: '/dashboard',
-    children: [
-      {
-        path: 'views',
-        component: () => import('@/views/tisp/rule-list'),
-        name: '规则管理',
-        meta: { title: '规则管理', icon: 'dashboard', affix: true }
-      }
-    ]
+    redirect: '/tisp/rule-list'
   },
-  // ruleManagementRouter,
+  ruleManagementRouter,
   instanceManagementRouter,
   sqlTextManagementRouter,
   sqlAuditRouter
