@@ -4,7 +4,7 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
-const prodUrl = process.env.VUE_APP_BASE_PATH + process.env.VUE_APP_BASE_API
+const prodUrl = process.env.VUE_APP_BASE_PATH
 const devUrl = process.env.VUE_APP_BASE_API
 let curUrl = ''
 process.env.NODE_ENV === 'development' ? curUrl = devUrl : curUrl = prodUrl
