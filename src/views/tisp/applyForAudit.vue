@@ -37,7 +37,7 @@
                   />
                 </el-select>
               </el-form-item>
-              <el-form-item label="数据表选择">
+              <el-form-item label="数据库选择">
                 <el-input
                   v-model="auditStr.DbName"
                   placeholder="请输入内容"
