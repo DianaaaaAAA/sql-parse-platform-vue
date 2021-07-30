@@ -4,9 +4,12 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
+const prodUrl = process.env.VUE_APP_BASE_PATH + process.env.VUE_APP_BASE_API
+const devUrl = process.env.VUE_APP_BASE_API
+let curUrl = ''
+process.env.NODE_ENV === 'development' ? curUrl = devUrl : curUrl = prodUrl
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
+  baseURL: curUrl, // url = base url + request url
   timeout: 5000 // request timeout
 })
 
