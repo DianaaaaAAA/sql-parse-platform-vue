@@ -7,7 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import ruleManagementRouter from './modules/ruleManagement'
+// import ruleManagementRouter from './modules/ruleManagement'
 import sqlTextManagementRouter from './modules/sqlTextManagement'
 import sqlAuditRouter from './modules/sqlAudit'
 import instanceManagementRouter from './modules/instanceManagement'
@@ -75,9 +75,17 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/tisp/rule-list'
+    // redirect: '/dashboard',
+    children: [
+      {
+        path: 'views',
+        component: () => import('@/views/tisp/rule-list'),
+        name: '规则管理',
+        meta: { title: '规则管理', icon: 'dashboard', affix: true }
+      }
+    ]
   },
-  ruleManagementRouter,
+  // ruleManagementRouter,
   instanceManagementRouter,
   sqlTextManagementRouter,
   sqlAuditRouter
