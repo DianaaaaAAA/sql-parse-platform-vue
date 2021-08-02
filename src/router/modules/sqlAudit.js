@@ -1,7 +1,7 @@
 import Layout from '@/layout'
 
 const sqlAuditRouter = {
-  path: '/audit',
+  path: '/tisp',
   component: Layout,
   redirect: 'noRedirect',
   // name: 'Audit',
