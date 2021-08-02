@@ -203,7 +203,13 @@ export default {
       // console.log(content)
       const formData = new FormData()
       formData.append('file', content.file)
-      uploadSQLText(formData)
+      uploadSQLText(formData).then(response => {
+        this.$message.success('操作成功')
+        this.refresh()
+        this.cancelAdd()
+      }).catch(error => {
+        this.$message.error(error)
+      })
     },
 
     deleteText(row) {
