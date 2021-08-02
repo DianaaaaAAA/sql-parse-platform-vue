@@ -15,29 +15,12 @@
     <el-button type="primary" icon="el-icon-refresh-right" size="small" round style="margin: 0 0 16px 16px;" @click="refresh()">刷新</el-button>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <!-- <el-table-column align="center" label="ID" width="200">
-        <template slot-scope="{row}">
-          <span>{{ row.ID }}</span>
-        </template>
-      </el-table-column> -->
 
       <el-table-column align="center" label="脚本名称">
         <template slot-scope="{row}">
           <span>{{ row.Name }}</span>
         </template>
       </el-table-column>
-
-      <!--<el-table-column align="center" label="上传者">
-        <template slot-scope="{row}">
-          <span>{{ row.User }}</span>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column align="center" label="文件大小">
-        <template slot-scope="{row}">
-          <span>{{ row.Size }}</span>
-        </template>
-      </el-table-column> -->
 
       <el-table-column align="center" label="上传时间">
         <template slot-scope="{row}">
@@ -84,10 +67,11 @@
             <el-upload
               class="upload-demo"
               drag
-              multiple
               accept=".sql"
               action="tispector/file/upload"
+              :http-request="myUpload"
               :on-success="handleUploadSuccess"
+              :on-error="handleUploadError"
               :before-upload="beforeUpload"
               :file-list="uploadFileList"
             >
@@ -131,10 +115,11 @@
 </template>
 
 <script>
-import { fetchSQLTextList, deleteSQLText } from '@/api/sql-text'
+// import axios from 'axios'
+import { fetchSQLTextList, deleteSQLText, uploadSQLText } from '@/api/sql-text'
 
 export default {
-  name: 'DropzoneDemo',
+  name: 'SqlTextManage',
   data() {
     return {
       list: null,
@@ -205,6 +190,20 @@ export default {
       }
       this.refresh()
       this.cancelAdd()
+    },
+
+    handleUploadError(error) {
+      // console.log('error')
+      const result = JSON.parse(error.message)
+      // console.log(result)
+      this.$message.error(result)
+    },
+
+    myUpload(content) {
+      // console.log(content)
+      const formData = new FormData()
+      formData.append('file', content.file)
+      uploadSQLText(formData)
     },
 
     deleteText(row) {

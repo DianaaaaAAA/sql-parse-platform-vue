@@ -7,10 +7,14 @@ export function fetchSQLTextList() {
   })
 }
 
-export function addSQLText() {
+export function uploadSQLText(formData) {
   return request({
-    url: `/tisp/sql-text`,
-    method: 'post'
+    url: `/tispector/file/upload`,
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
   })
 }
 
